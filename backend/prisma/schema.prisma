@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Sketch {
+  id          String   @id @default(uuid())
+  title       String
+  category    String
+  description String?
+  medium      String?
+  year        String?
+  imageUrl    String
+  purchaseUrl String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BlogPost {
+  id        String   @id @default(uuid())
+  title     String
+  tag       String
+  excerpt   String
+  content   String   @db.Text
+  dateStr   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  type      String
+  content   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id        String @id @default("global")
+  instagram String @default("")
+  auction   String @default("")
+  linkedin  String @default("")
+  github    String @default("")
+}
+
+model AdminUser {
+  id       String @id @default("admin")
+  password String
+}

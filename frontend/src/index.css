@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #1a1008;
+  --color-ink-dark: #e8dfc8;
+  --color-paper: #f4f0e6;
+  --color-paper-dark: #0f0d09;
+  --color-paper2: #ede8d8;
+  --color-paper2-dark: #1a1710;
+  --color-paper3: #e6e0cc;
+  --color-paper3-dark: #211e14;
+  --color-accent: #8b1a1a;
+  --color-accent-dark: #c0392b;
+  --color-rule: #1a1008;
+  --color-rule-dark: #c8bea6;
+  --color-muted: #6b5f4a;
+  --color-muted-dark: #9a8e78;
+  --color-ghost: #b8aa8e;
+  --color-ghost-dark: #4a4438;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-fell: "IM Fell English", Georgia, serif;
+}
+
+@layer base {
+  :root {
+    --ink: var(--color-ink);
+    --paper: var(--color-paper);
+    --paper2: var(--color-paper2);
+    --paper3: var(--color-paper3);
+    --accent: var(--color-accent);
+    --rule: var(--color-rule);
+    --muted: var(--color-muted);
+    --ghost: var(--color-ghost);
+    --transition: 0.2s ease;
+  }
+
+  .dark {
+    --ink: var(--color-ink-dark);
+    --paper: var(--color-paper-dark);
+    --paper2: var(--color-paper2-dark);
+    --paper3: var(--color-paper3-dark);
+    --accent: var(--color-accent-dark);
+    --rule: var(--color-rule-dark);
+    --muted: var(--color-muted-dark);
+    --ghost: var(--color-ghost-dark);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[var(--paper)] text-[var(--ink)] font-mono min-h-screen transition-colors duration-300;
+    cursor: default;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.5;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--paper2);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--ghost);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+  }
+}
+
+@layer components {
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+  .font-fell {
+    font-family: var(--font-fell);
+  }
+  
+  .rule {
+    @apply border-none border-t border-[var(--rule)] my-8;
+  }
+  .rule-thick {
+    @apply border-none border-t-[3px] border-double border-[var(--rule)] my-8;
+  }
+  .rule-ornament {
+    @apply text-center my-8 text-[var(--muted)] text-xl tracking-[0.5em];
+  }
+  .btn-action {
+    @apply block text-center px-4 py-2 font-mono text-[10px] tracking-[0.15em] uppercase no-underline border border-[var(--ink)] text-[var(--ink)] cursor-pointer bg-transparent transition-all duration-200;
+  }
+  .btn-action:hover, .btn-action.primary {
+    @apply bg-[var(--ink)] text-[var(--paper)] border-[var(--ink)];
+  }
+  .btn-action.primary:hover {
+    @apply bg-[var(--paper)] text-[var(--ink)];
+  }
+  .btn-action.accent {
+    @apply border-[var(--accent)] text-[var(--accent)];
+  }
+  .btn-action.accent:hover {
+    @apply bg-[var(--accent)] text-[var(--paper)];
+  }
+
+  /* Blog post body content styling */
+  .post-body p {
+    font-family: var(--font-fell);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    text-align: justify;
+    margin-bottom: 1.5rem;
+  }
+  .post-body p:first-of-type::first-letter {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: 4.5rem;
+    line-height: 0.8;
+    float: left;
+    margin-right: 0.5rem;
+    margin-top: -0.3rem;
+    color: var(--accent);
+  }
+  .post-body h2 {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: 1.8rem;
+    margin: 2.5rem 0 1rem 0;
+    border-bottom: 1px solid var(--ghost);
+    padding-bottom: 0.5rem;
+  }
+  .post-body blockquote {
+    border-left: 3px solid var(--accent);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--muted);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
