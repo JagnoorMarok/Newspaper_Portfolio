@@ -157,7 +157,7 @@ export default function Blog() {
           <div className="text-center my-8 text-[var(--muted)] text-xl tracking-[0.5em]">— ✦ ✦ ✦ —</div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-[var(--rule)] border border-[var(--rule)] border-t-0 mx-8 mb-8">
-            {otherPosts.map((post, idx) => (
+            {otherPosts.map(post => (
               <div key={post.id} onClick={() => setViewingPost(post)} className="bg-[var(--paper)] p-6 cursor-pointer transition-colors duration-150 hover:bg-[var(--paper3)]">
                 {post.tag && (
                   <div className="inline-block text-[9px] tracking-[0.2em] uppercase bg-[var(--ink)] text-[var(--paper)] py-[2px] px-2 mb-2">
