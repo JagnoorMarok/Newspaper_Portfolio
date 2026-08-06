@@ -19,7 +19,8 @@
     "react-helmet-async": "^3.0.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.18.2",
-    "rehype-raw": "^7.0.0"
+    "rehype-raw": "^7.0.0",
+    "text-to-svg": "^3.1.5"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
