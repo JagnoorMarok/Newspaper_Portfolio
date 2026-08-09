@@ -1,7 +1,15 @@
+import CoffeeStain from './CoffeeStain';
+import { Coffee } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="border-t-[3px] border-double border-[var(--rule)] pt-8 md:pt-12 pb-6 mt-16 px-4 md:px-8 container mx-auto">
+    <footer className="border-t-[3px] border-double border-[var(--rule)] pt-8 md:pt-12 pb-6 mt-16 px-4 md:px-8 container mx-auto relative">
+      <CoffeeStain 
+        id="stain-footer"
+        positionClass="left-8 md:left-32 bottom-20"
+        alignSpill="left"
+        secretMessage={<span className="text-[#e8dfc8] font-bold">I buried the treasure under the...</span>}
+      />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8 md:mb-12">
         
         {/* Column 1: The Publisher */}
@@ -54,13 +62,24 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-[var(--rule)] pt-6 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-4 text-center md:text-left">
+      <div className="border-t border-[var(--rule)] pt-6 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-4 text-center md:text-left relative">
         <p className="font-mono text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-[var(--ghost)]">
           Volume I — Established MMXXVI
         </p>
         <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--ghost)]">
           All Works © Jagnoor Singh Marok. All Rights Reserved.
         </p>
+
+        <button
+          onClick={() => {
+            localStorage.removeItem('foundStains');
+            window.location.reload();
+          }}
+          title="Clean up all coffee stains"
+          className="absolute right-0 -top-4 w-8 h-8 rounded-full border border-[var(--rule)] flex items-center justify-center text-[var(--ghost)] hover:text-[var(--ink)] hover:border-[var(--ink)] hover:bg-[var(--paper2)] transition-colors bg-[var(--paper)]"
+        >
+          <Coffee size={14} />
+        </button>
       </div>
     </footer>
   );

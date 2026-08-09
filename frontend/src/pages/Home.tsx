@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import SEO from '../components/SEO';
 import meImg from '../assets/me.jpeg';
 import GuestbookDrawer from '../components/GuestbookDrawer';
+import CoffeeStain from '../components/CoffeeStain';
 
 export default function Home() {
   const [isGuestbookOpen, setIsGuestbookOpen] = useState(false);
@@ -17,8 +18,19 @@ export default function Home() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.3 }}
-      className="container mx-auto px-8"
+      className="container mx-auto px-8 relative"
     >
+      <CoffeeStain 
+        id="stain-home"
+        positionClass="-right-4 md:right-12 top-64"
+        alignSpill="right"
+        secretMessage={
+          <>
+            <span className="text-[#e8dfc8] font-bold">I am Batman.</span>
+          </>
+        }
+      />
+      
       <div className="text-center py-12 px-8 border-b-[3px] border-double border-[var(--rule)]">
         <div className="text-[10px] tracking-[0.2em] uppercase text-[var(--muted)] mb-2">
           Vol. I — The Portfolio Edition

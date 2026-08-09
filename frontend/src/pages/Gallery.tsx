@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { API_BASE_URL } from '../config';
 import SEO from '../components/SEO';
+import CoffeeStain from '../components/CoffeeStain';
 
 // Example Mock SVG
 const MockSketch = () => (
@@ -70,8 +71,18 @@ export default function Gallery() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.3 }}
-      className="container mx-auto"
+      className="container mx-auto relative"
     >
+      <CoffeeStain 
+        id="stain-gallery"
+        positionClass="-right-4 md:right-16 bottom-[10vh]"
+        alignSpill="right"
+        secretMessage={
+          <>
+            <span className="text-[#e8dfc8] font-bold">The walls are whispering.</span>
+          </>
+        }
+      />
       <div className="p-8 border-b-2 border-[var(--rule)]">
         <h1 className="font-serif font-black text-5xl tracking-[-0.03em]">The Sketchbook</h1>
         <div className="text-[10px] tracking-[0.15em] uppercase text-[var(--muted)] mt-2">

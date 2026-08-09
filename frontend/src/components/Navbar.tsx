@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Moon, Sun } from 'lucide-react';
+import CoffeeStain from './CoffeeStain';
 
 export default function Navbar() {
   const [date, setDate] = useState('');
@@ -47,6 +48,12 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b-2 border-[var(--rule)] bg-[var(--paper)] transition-colors duration-300">
+      <CoffeeStain 
+        id="stain-nav" 
+        positionClass="left-1/2 md:left-1/3 top-2" 
+        alignSpill="bottom" 
+        secretMessage={<span className="text-[#e8dfc8] font-bold">Why is the rum gone?</span>} 
+      />
       <div className="flex items-center justify-between px-4 md:px-8 py-2 border-b border-[var(--ghost)]">
         <div className="hidden md:flex flex-col text-[10px] tracking-[0.15em] uppercase text-[var(--muted)] font-mono">
           <span>{date}</span>

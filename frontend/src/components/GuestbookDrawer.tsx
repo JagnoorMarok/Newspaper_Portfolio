@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { API_BASE_URL } from '../config';
+import CoffeeStain from './CoffeeStain';
 
 interface GuestbookEntry {
   id: string;
@@ -83,6 +84,12 @@ export default function GuestbookDrawer({ isOpen, onClose }: GuestbookDrawerProp
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className="fixed top-0 right-0 h-full w-full md:w-[450px] bg-[var(--paper)] border-l border-[var(--rule)] shadow-2xl z-50 flex flex-col overflow-hidden"
           >
+            <CoffeeStain 
+              id="stain-guestbook"
+              positionClass="right-8 md:right-16 top-[40vh]"
+              alignSpill="right"
+              secretMessage={<span className="text-[#e8dfc8] font-bold">Please stop reading my diary.</span>}
+            />
             {/* Header */}
             <div className="p-6 border-b-[3px] border-double border-[var(--rule)] flex justify-between items-center bg-[var(--paper)]">
               <div>

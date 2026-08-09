@@ -4,6 +4,7 @@ import { API_BASE_URL } from '../config';
 import SEO from '../components/SEO';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import CoffeeStain from '../components/CoffeeStain';
 
 type BlogPost = {
   id: string;
@@ -104,8 +105,18 @@ export default function Blog() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.3 }}
-      className="container mx-auto"
+      className="container mx-auto relative"
     >
+      <CoffeeStain 
+        id="stain-blog"
+        positionClass="-left-4 md:left-8 top-[30vh]"
+        alignSpill="left"
+        secretMessage={
+          <>
+            <span className="text-[#e8dfc8] font-bold">meow meow meow.</span>
+          </>
+        }
+      />
       <div className="p-8 border-b-2 border-[var(--rule)] grid grid-cols-1 md:grid-cols-[1fr_auto] items-end gap-8">
         <div>
           <div className="text-[9px] tracking-[0.2em] uppercase text-[var(--muted)] mb-1">
