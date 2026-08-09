@@ -5,12 +5,35 @@ import { Moon, Sun } from 'lucide-react';
 export default function Navbar() {
   const [date, setDate] = useState('');
   const [isDark, setIsDark] = useState(false);
+  const [weather, setWeather] = useState('PUNJAB, IN — ...');
+  const [volume, setVolume] = useState('Vol. I, No. 1');
 
   useEffect(() => {
     const today = new Date();
     const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     setDate(today.toLocaleDateString('en-GB', options).toUpperCase());
     
+    const start = new Date(today.getFullYear(), 0, 0);
+    const diff = (today.getTime() - start.getTime()) + ((start.getTimezoneOffset() - today.getTimezoneOffset()) * 60 * 1000);
+    const oneDay = 1000 * 60 * 60 * 24;
+    const dayOfYear = Math.floor(diff / oneDay);
+    setVolume(`Vol. I, No. ${dayOfYear}`);
+
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=30.7333&longitude=76.7794&current=temperature_2m,weather_code&timezone=auto')
+      .then(res => res.json())
+      .then(data => {
+        const temp = Math.round(data.current.temperature_2m);
+        const code = data.current.weather_code;
+        let conditions = 'Clear';
+        if (code > 0 && code <= 3) conditions = 'Cloudy';
+        if (code === 45 || code === 48) conditions = 'Hazy';
+        if (code >= 51 && code <= 67) conditions = 'Rain';
+        if (code >= 71 && code <= 77) conditions = 'Snow';
+        if (code >= 95) conditions = 'Storms';
+        setWeather(`PUNJAB, IN — ${conditions}, ${temp}°C`);
+      })
+      .catch(() => setWeather('PUNJAB, IN'));
+
     // Check initial theme
     if (document.body.classList.contains('dark')) {
       setIsDark(true);
@@ -25,9 +48,10 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b-2 border-[var(--rule)] bg-[var(--paper)] transition-colors duration-300">
       <div className="flex items-center justify-between px-4 md:px-8 py-2 border-b border-[var(--ghost)]">
-        <span className="text-[10px] tracking-[0.15em] uppercase text-[var(--muted)] hidden md:block">
-          {date}
-        </span>
+        <div className="hidden md:flex flex-col text-[10px] tracking-[0.15em] uppercase text-[var(--muted)] font-mono">
+          <span>{date}</span>
+          <span className="text-[9px] tracking-widest">{weather} &bull; {volume}</span>
+        </div>
         <span className="font-serif font-black text-lg tracking-[-0.02em]">
           The Marok Gazette
         </span>

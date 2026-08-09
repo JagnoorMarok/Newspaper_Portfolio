@@ -195,9 +195,16 @@ router.delete('/sketches/:id', requireAdmin, asyncHandler(async (req, res) => {
 router.get('/blogs', asyncHandler(async (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
   const cursor = req.query.cursor as string | undefined;
+  const category = req.query.category as string | undefined;
+
+  let whereClause = {};
+  if (category) {
+    whereClause = { tag: category };
+  }
 
   if (limit) {
     const blogs = await prisma.blogPost.findMany({
+      where: whereClause,
       take: limit + 1,
       ...(cursor && {
         skip: 1,
@@ -213,7 +220,7 @@ router.get('/blogs', asyncHandler(async (req, res) => {
     }
     res.json({ data: blogs, hasMore });
   } else {
-    const blogs = await prisma.blogPost.findMany({ orderBy: { createdAt: 'desc' } });
+    const blogs = await prisma.blogPost.findMany({ where: whereClause, orderBy: { createdAt: 'desc' } });
     res.json({ data: blogs, hasMore: false });
   }
 }));

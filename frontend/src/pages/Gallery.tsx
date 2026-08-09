@@ -91,14 +91,14 @@ export default function Gallery() {
         ))}
       </div>
 
-      <div className="columns-2 md:columns-3 gap-[1px] p-[1px] bg-[var(--rule)]">
+      <div className="columns-2 md:columns-3 gap-4 px-4 md:px-8 pb-8 pt-4">
         {filtered.map(sketch => (
           <div 
             key={sketch.id} 
-            className="break-inside-avoid bg-[var(--paper)] mb-[1px] cursor-pointer relative overflow-hidden group"
+            className="break-inside-avoid bg-paper mb-4 cursor-pointer relative overflow-hidden group border border-[var(--rule)]"
             onClick={() => setSelectedSketch(sketch)}
           >
-            <div className="w-full overflow-hidden bg-[var(--paper2)] flex items-center justify-center">
+            <div className="w-full overflow-hidden bg-transparent flex items-center justify-center">
               {sketch.imageUrl === 'mock' ? <MockSketch /> : <img src={sketch.imageUrl} alt={sketch.title} loading="lazy" className="w-full block grayscale-[20%] contrast-[1.05] transition-all duration-300 group-hover:scale-105 group-hover:grayscale-0 group-hover:contrast-110 object-cover" />}
             </div>
             <div className="p-3 border-t border-[var(--ghost)]">
@@ -132,7 +132,7 @@ export default function Gallery() {
               animate={{ scale: 1, rotate: 0 }}
               exit={{ scale: 0.95, rotate: -0.5 }}
               onClick={e => e.stopPropagation()}
-              className="bg-[var(--paper)] max-w-[900px] w-[90vw] max-h-[90vh] overflow-auto border-[4px] border-[var(--ink)] flex flex-col"
+              className="bg-paper max-w-[900px] w-[90vw] max-h-[90vh] overflow-auto border-[4px] border-[var(--ink)] flex flex-col"
             >
               <div className="p-4 md:p-6 border-b-[3px] border-double border-[var(--rule)] flex justify-between items-center">
                 <div>
@@ -147,7 +147,7 @@ export default function Gallery() {
                 >✕</button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr]">
-                <div className="p-6 md:border-r border-[var(--rule)] flex items-center justify-center bg-[var(--paper2)]">
+                <div className="p-6 md:border-r border-[var(--rule)] flex items-center justify-center bg-transparent">
                   {selectedSketch.imageUrl === 'mock' ? <MockSketch /> : <img src={selectedSketch.imageUrl} className="w-full max-h-[500px] object-contain grayscale-[10%] contrast-[1.05]" />}
                 </div>
                 <div className="p-6">

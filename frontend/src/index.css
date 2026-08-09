@@ -119,10 +119,13 @@
   }
 
   /* Blog post body content styling */
-  .post-body p {
+  .post-body {
     font-family: var(--font-fell);
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     line-height: 1.8;
+    color: var(--ink);
+  }
+  .post-body p {
     text-align: justify;
     margin-bottom: 1.5rem;
   }
@@ -136,20 +139,79 @@
     margin-top: -0.3rem;
     color: var(--accent);
   }
-  .post-body h2 {
+  .post-body h1, .post-body h2, .post-body h3, .post-body h4 {
     font-family: var(--font-serif);
     font-weight: 900;
-    font-size: 1.8rem;
+    color: var(--ink);
     margin: 2.5rem 0 1rem 0;
-    border-bottom: 1px solid var(--ghost);
-    padding-bottom: 0.5rem;
   }
+  .post-body h1 { font-size: 2.2rem; border-bottom: 2px solid var(--rule); padding-bottom: 0.5rem; }
+  .post-body h2 { font-size: 1.8rem; border-bottom: 1px solid var(--ghost); padding-bottom: 0.5rem; }
+  .post-body h3 { font-size: 1.5rem; }
+  .post-body h4 { font-size: 1.2rem; }
+  
+  .post-body ul, .post-body ol {
+    margin: 1.5rem 0 1.5rem 2rem;
+  }
+  .post-body ul {
+    list-style-type: disc;
+  }
+  .post-body ol {
+    list-style-type: decimal;
+  }
+  .post-body li {
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem;
+  }
+  
+  .post-body strong, .post-body b {
+    font-weight: bold;
+    color: var(--ink);
+  }
+  
+  .post-body em, .post-body i {
+    font-style: italic;
+  }
+
   .post-body blockquote {
     border-left: 3px solid var(--accent);
     padding-left: 1.5rem;
     margin: 2rem 0;
     font-style: italic;
     color: var(--muted);
+  }
+  
+  .post-body code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background-color: var(--paper2);
+    padding: 0.1rem 0.3rem;
+    border: 1px solid var(--ghost);
+  }
+  
+  .post-body pre {
+    background-color: var(--paper2);
+    padding: 1rem;
+    border: 1px solid var(--rule);
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  
+  .post-body pre code {
+    background: transparent;
+    padding: 0;
+    border: none;
+  }
+  
+  .post-body a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 4px;
+  }
+  .post-body a:hover {
+    color: var(--ink);
+    text-decoration-style: solid;
   }
 }
 
@@ -160,5 +222,63 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+  .bg-paper { background-color: var(--paper) !important; }
+  .bg-paper2 { background-color: var(--paper2) !important; }
+  .bg-paper3 { background-color: var(--paper3) !important; }
+  .bg-rule { background-color: var(--rule) !important; }
+  .bg-ghost { background-color: var(--ghost) !important; }
+}
+
+@media print {
+  @page {
+    margin: 2cm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  /* Remove noise overlay */
+  body::before {
+    display: none !important;
+  }
+
+  /* Hide interactive UI elements */
+  nav, footer, button, .no-print {
+    display: none !important;
+  }
+
+  /* Remove padding from the main container as paper has natural margins */
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    padding-top: 0 !important; /* Override navbar spacing */
+  }
+  
+  /* Ensure text is stark black for printing */
+  .font-fell, p, span, h1, h2, h3, a {
+    color: black !important;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  p, img, blockquote {
+    page-break-inside: avoid;
+  }
+
+  /* Format blog post bodies into newspaper columns */
+  .post-body {
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid #ccc;
+  }
+
+  .post-body p {
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
   }
 }
