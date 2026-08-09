@@ -255,6 +255,32 @@ router.delete('/messages/:id', requireAdmin, asyncHandler(async (req, res) => {
 }));
 
 // =======================
+// GUESTBOOK
+// =======================
+router.get('/guestbook', asyncHandler(async (req, res) => {
+  const entries = await prisma.guestbookEntry.findMany({ 
+    orderBy: { createdAt: 'desc' },
+    take: 50
+  });
+  res.json(entries);
+}));
+
+router.post('/guestbook', asyncHandler(async (req, res) => {
+  const { name, message } = req.body;
+  if (!name || !message) {
+    res.status(400).json({ error: 'Name and message are required' });
+    return;
+  }
+  const entry = await prisma.guestbookEntry.create({ data: { name, message } });
+  res.status(201).json(entry);
+}));
+
+router.delete('/guestbook/:id', requireAdmin, asyncHandler(async (req, res) => {
+  await prisma.guestbookEntry.delete({ where: { id: req.params.id as string } });
+  res.json({ success: true });
+}));
+
+// =======================
 // SETTINGS (Links)
 // =======================
 router.get('/settings', asyncHandler(async (req, res) => {

@@ -11,7 +11,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(false);
   
   // Dashboard state
-  const [activeTab, setActiveTab] = useState<'sketches' | 'posts' | 'messages' | 'links' | 'security'>('sketches');
+  const [activeTab, setActiveTab] = useState<'sketches' | 'posts' | 'messages' | 'ledger' | 'links' | 'security'>('sketches');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,7 +114,7 @@ export default function Admin() {
       </div>
 
       <div className="flex overflow-x-auto no-scrollbar border-b border-[var(--rule)] mb-8">
-        {['sketches', 'posts', 'messages', 'links', 'security'].map(tab => (
+        {['sketches', 'posts', 'messages', 'ledger', 'links', 'security'].map(tab => (
           <button 
             key={tab}
             onClick={() => setActiveTab(tab as any)}
@@ -129,6 +129,7 @@ export default function Admin() {
         {activeTab === 'sketches' && <ManageSketches token={token} />}
         {activeTab === 'posts' && <ManagePosts token={token} />}
         {activeTab === 'messages' && <ManageMessages token={token} />}
+        {activeTab === 'ledger' && <ManageLedger token={token} />}
         {activeTab === 'links' && <ManageLinks token={token} />}
         {activeTab === 'security' && <ManageSecurity token={token} />}
       </div>
@@ -674,6 +675,67 @@ function ManageSecurity({ token }: { token: string }) {
           {loading ? 'Updating...' : 'Change Passphrase'}
         </button>
       </form>
+    </div>
+  );
+}
+
+function ManageLedger({ token }: { token: string }) {
+  const [entries, setEntries] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/guestbook`)
+    .then(res => res.json())
+    .then(data => {
+      setEntries(data);
+      setLoading(false);
+    })
+    .catch(() => setLoading(false));
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this ledger entry?')) return;
+    const res = await fetch(`${API_BASE_URL}/api/guestbook/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (res.ok) {
+      setEntries(entries.filter(e => e.id !== id));
+    }
+  };
+
+  return (
+    <div>
+      <h2 className="font-serif font-bold text-2xl mb-4">The Public Ledger</h2>
+      <p className="font-fell text-[var(--muted)] mb-6">Manage entries submitted to the Guestbook.</p>
+      
+      {loading ? (
+        <div className="font-mono text-sm text-[var(--muted)]">Loading ledger...</div>
+      ) : entries.length === 0 ? (
+        <div className="border border-[var(--rule)] p-8 text-center bg-[var(--paper2)]">
+          <p className="font-mono text-sm">The ledger is currently empty.</p>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {entries.map((entry: any) => (
+            <div key={entry.id} className="border border-[var(--ghost)] p-4 bg-[var(--paper2)]">
+              <div className="flex justify-between items-center mb-2 pb-2 border-b border-[var(--ghost)]">
+                <span className="font-serif font-bold">{entry.name}</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-[9px] font-mono text-[var(--muted)] tracking-widest">{new Date(entry.createdAt).toLocaleString()}</span>
+                  <button 
+                    onClick={() => handleDelete(entry.id)} 
+                    className="btn-action text-[10px] text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--paper)] py-1 px-3"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+              <p className="font-fell text-sm leading-[1.5] whitespace-pre-wrap">{entry.message}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

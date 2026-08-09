@@ -1,11 +1,17 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import SEO from '../components/SEO';
 import meImg from '../assets/me.jpeg';
+import GuestbookDrawer from '../components/GuestbookDrawer';
 
 export default function Home() {
+  const [isGuestbookOpen, setIsGuestbookOpen] = useState(false);
+
   return (
     <>
       <SEO title="Home" />
+      <GuestbookDrawer isOpen={isGuestbookOpen} onClose={() => setIsGuestbookOpen(false)} />
+      
       <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -24,6 +30,17 @@ export default function Home() {
         <div className="font-fell italic text-lg text-[var(--muted)] tracking-[0.05em] mb-4">
           Computer Scientist · Designer · Soldier in Waiting · Sketcher of Worlds
         </div>
+        
+        {/* Letters to the Editor Prompt */}
+        <div className="my-8 border-y border-[var(--rule)] py-4 max-w-2xl mx-auto cursor-pointer group" onClick={() => setIsGuestbookOpen(true)}>
+          <div className="font-serif font-bold text-lg uppercase tracking-widest text-[var(--ink)] group-hover:text-[var(--accent)] transition-colors mb-2">
+            The Public Ledger
+          </div>
+          <p className="font-fell text-[1rem] text-[var(--muted)] leading-relaxed italic group-hover:text-[var(--ink)] transition-colors">
+            Our readers are cordially invited to submit their thoughts, queries, or commendations to the editorial desk. Click here to read recent missives or pen your own letter to the Editor.
+          </p>
+        </div>
+
       </div>
       <div className="h-2 bg-[var(--ink)] w-full m-0"></div>
 

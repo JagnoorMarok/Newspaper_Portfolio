@@ -52,3 +52,10 @@ model AdminUser {
   id       String @id @default("admin")
   password String
 }
+
+model GuestbookEntry {
+  id        String   @id @default(uuid())
+  name      String
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+}
