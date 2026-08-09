@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useState, TouchEvent } from 'react';
+import { useState, type TouchEvent } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
