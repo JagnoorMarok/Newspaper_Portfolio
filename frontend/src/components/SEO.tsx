@@ -16,7 +16,7 @@ export default function SEO({
   image = '/favicon.svg'
 }: SEOProps) {
   const fullTitle = title ? `${title} | ${name}` : `The Marok Gazette | ${name}`;
-  const metaDescription = description || "The personal portfolio and chronicle of Jagnoor Singh Marok: Computer Scientist, Designer, and Sketcher of Worlds.";
+  const metaDescription = description || "The personal portfolio and chronicle of Jagnoor Singh Marok: Computer Engineer, Designer, and Sketcher of Worlds.";
 
   return (
     <Helmet>

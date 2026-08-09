@@ -40,7 +40,7 @@ export default function Home() {
         </div>
         <br></br>
         <div className="font-fell italic text-lg text-[var(--muted)] tracking-[0.05em] mb-4">
-          Computer Scientist · Designer · Soldier in Waiting · Sketcher of Worlds
+          Computer Engineer · Designer · Soldier in Waiting · Sketcher of Worlds
         </div>
         
         {/* Letters to the Editor Prompt */}
@@ -78,7 +78,7 @@ export default function Home() {
           </div>
           <p className="font-fell text-[1.05rem] leading-[1.7] mb-4 text-justify">
             <span className="font-serif font-black text-6xl leading-[0.8] float-left mr-2 mt-1 text-[var(--accent)]">J</span>
-            agnoor Singh Marok is a student of Computer Science at Dr. B. R. Ambedkar National Institute of Technology, Jalandhar — an institution of national eminence — where he pursues the discipline with uncommon rigour and intellectual ambition. His principal interests span the breadth of modern computing: web development, interaction design, the architecture of data structures, and the emergent science of machine learning.
+            agnoor Singh Marok is a student of Computer Engineering at Dr. B. R. Ambedkar National Institute of Technology, Jalandhar — an institution of national eminence — where he pursues the discipline with uncommon rigour and intellectual ambition. His principal interests span the breadth of modern computing: web development, interaction design, the architecture of data structures, and the emergent science of machine learning.
           </p>
           <div className="font-serif italic text-2xl leading-[1.3] border-y-[3px] border-[var(--ink)] py-4 my-6 text-[var(--accent)]">
             "To understand how systems work at their deepest level — and to use that knowledge to build things that endure."
@@ -118,9 +118,9 @@ export default function Home() {
 
       <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr_2fr] border-b border-[var(--rule)]">
         <div className="p-8 md:border-r border-[var(--rule)]">
-          <h2 className="font-serif font-bold text-2xl mb-4">The Making of a Computer Scientist</h2>
+          <h2 className="font-serif font-bold text-2xl mb-4">The Making of a Computer Engineer</h2>
           <p className="font-fell text-[0.95rem] leading-[1.7] mb-3 text-justify">
-            At its core, Jagnoor's academic pursuit is an exercise in understanding causality within complex systems. Where many students approach computer science as a vocational exercise — a means to an employable end — he approaches it as a natural philosopher might: through sustained inquiry into first principles.
+            At its core, Jagnoor's academic pursuit is an exercise in understanding causality within complex systems. Where many students approach computer engineering as a vocational exercise — a means to an employable end — he approaches it as a natural philosopher might: through sustained inquiry into first principles.
           </p>
           <p className="font-fell text-[0.95rem] leading-[1.7] mb-3 text-justify">
             His study of data structures is inseparable from his interest in efficiency; his exploration of machine learning, inseparable from questions of epistemology and the nature of pattern-recognition. It is, in the truest sense, an interdisciplinary vocation — one that draws equally from mathematics, logic, and the humanistic concern for usability and experience.
