@@ -117,14 +117,13 @@ export default function Blog() {
           </>
         }
       />
-      <div className="p-8 border-b-2 border-[var(--rule)] grid grid-cols-1 md:grid-cols-[1fr_auto] items-end gap-8">
-        <div>
-          <div className="text-[9px] tracking-[0.2em] uppercase text-[var(--muted)] mb-1">
-            {selectedCategory ? `Filtered by category: ${selectedCategory}` : 'Personal Dispatches from the Academy'}
-          </div>
-          <h1 className="font-serif font-black text-5xl tracking-[-0.03em]">The Bulletin</h1>
+      <div className="py-8 border-b-[3px] border-double border-[var(--ink)] mb-8">
+        <h1 className="font-serif font-black text-4xl md:text-6xl lg:text-8xl tracking-[-0.03em] text-center uppercase">The Bulletin</h1>
+        <div className="text-xs md:text-sm tracking-[0.2em] uppercase text-[var(--ink)] mt-4 text-center border-y border-[var(--ghost)] py-2 font-mono flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4">
+          <span>{selectedCategory ? `Filtered by category: ${selectedCategory}` : 'Personal Dispatches from the Academy'}</span>
+          <span className="hidden md:inline">·</span>
+          <span>Latest Entries</span>
         </div>
-        <div className="text-[9px] tracking-[0.2em] uppercase text-[var(--muted)]">Latest Entries</div>
       </div>
 
       {featuredPost ? (

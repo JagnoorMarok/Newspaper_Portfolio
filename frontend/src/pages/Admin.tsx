@@ -11,7 +11,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(false);
   
   // Dashboard state
-  const [activeTab, setActiveTab] = useState<'sketches' | 'posts' | 'messages' | 'ledger' | 'links' | 'security'>('sketches');
+  const [activeTab, setActiveTab] = useState<'sketches' | 'posts' | 'messages' | 'ledger' | 'links' | 'security' | 'books' | 'projects'>('sketches');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,18 +103,18 @@ export default function Admin() {
       exit={{ opacity: 0, y: -10 }}
       className="container mx-auto px-8 max-w-5xl"
     >
-      <div className="py-8 border-b-[3px] border-double border-[var(--rule)] flex justify-between items-end">
-        <div>
-          <h1 className="font-serif font-black text-4xl tracking-[-0.02em] mb-1">Editor's Dashboard</h1>
-          <div className="text-[10px] tracking-[0.2em] uppercase text-[var(--muted)]">
-            Manage your digital portfolio
+      <div className="py-8 border-b-[3px] border-double border-[var(--ink)] flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="text-center md:text-left w-full">
+          <h1 className="font-serif font-black text-4xl md:text-6xl lg:text-8xl tracking-[-0.03em] uppercase">Editor's Dashboard</h1>
+          <div className="text-xs md:text-sm tracking-[0.2em] uppercase text-[var(--ink)] mt-4 border-y border-[var(--ghost)] py-2 font-mono flex justify-center md:justify-start items-center gap-4">
+            <span>Manage your digital portfolio</span>
+            <button onClick={handleLogout} className="btn-action text-[10px] ml-auto md:ml-0">Sign Out</button>
           </div>
         </div>
-        <button onClick={handleLogout} className="btn-action text-[10px]">Sign Out</button>
       </div>
 
       <div className="flex overflow-x-auto no-scrollbar border-b border-[var(--rule)] mb-8">
-        {['sketches', 'posts', 'messages', 'ledger', 'links', 'security'].map(tab => (
+        {['sketches', 'posts', 'projects', 'books', 'messages', 'ledger', 'links', 'security'].map(tab => (
           <button 
             key={tab}
             onClick={() => setActiveTab(tab as any)}
@@ -128,6 +128,8 @@ export default function Admin() {
       <div className="mb-12">
         {activeTab === 'sketches' && <ManageSketches token={token} />}
         {activeTab === 'posts' && <ManagePosts token={token} />}
+        {activeTab === 'projects' && <ManageProjects token={token} />}
+        {activeTab === 'books' && <ManageBooks token={token} />}
         {activeTab === 'messages' && <ManageMessages token={token} />}
         {activeTab === 'ledger' && <ManageLedger token={token} />}
         {activeTab === 'links' && <ManageLinks token={token} />}
@@ -732,6 +734,325 @@ function ManageLedger({ token }: { token: string }) {
                 </div>
               </div>
               <p className="font-fell text-sm leading-[1.5] whitespace-pre-wrap">{entry.message}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ManageBooks({ token }: { token: string }) {
+  const [books, setBooks] = useState<any[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [formData, setFormData] = useState({ title: '', author: '', category: '', rating: '', yearRead: '', description: '', purchaseUrl: '' });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/books`)
+      .then(res => res.json())
+      .then(res => setBooks(res.data || []))
+      .catch(err => console.error(err));
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const data = new FormData();
+    data.append('title', formData.title);
+    data.append('author', formData.author);
+    data.append('category', formData.category);
+    data.append('rating', formData.rating);
+    data.append('yearRead', formData.yearRead);
+    data.append('review', formData.description);
+    data.append('purchaseUrl', formData.purchaseUrl);
+    if (imageFile) {
+      data.append('image', imageFile);
+    }
+    
+    const url = editingId ? `${API_BASE_URL}/api/books/${editingId}` : `${API_BASE_URL}/api/books`;
+    const method = editingId ? 'PUT' : 'POST';
+
+    const res = await fetch(url, {
+      method,
+      headers: { Authorization: `Bearer ${token}` },
+      body: data
+    });
+    
+    if (res.ok) {
+      const savedBook = await res.json();
+      if (editingId) {
+        setBooks(books.map(b => b.id === editingId ? savedBook : b));
+      } else {
+        setBooks([savedBook, ...books]);
+      }
+      setIsAdding(false);
+      setEditingId(null);
+      setFormData({ title: '', author: '', category: '', rating: '', yearRead: '', description: '', purchaseUrl: '' });
+      setImageFile(null);
+    }
+  };
+
+  const handleEdit = (book: any) => {
+    setFormData({
+      title: book.title || '',
+      author: book.author || '',
+      category: book.category || '',
+      rating: book.rating || '',
+      yearRead: book.yearRead || '',
+      description: book.review || '',
+      purchaseUrl: book.purchaseUrl || ''
+    });
+    setEditingId(book.id);
+    setIsAdding(true);
+    window.scrollTo(0, 0);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this book?')) return;
+    const res = await fetch(`${API_BASE_URL}/api/books/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (res.ok) {
+      setBooks(books.filter(b => b.id !== id));
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="font-serif font-bold text-2xl mb-1">Library Catalog</h2>
+          <p className="font-fell text-[var(--muted)]">Upload and manage your readings.</p>
+        </div>
+        {!isAdding && (
+          <button onClick={() => {
+            setFormData({ title: '', author: '', category: '', rating: '', yearRead: '', description: '', purchaseUrl: '' });
+            setEditingId(null);
+            setIsAdding(true);
+          }} className="btn-action primary">Add New Book</button>
+        )}
+      </div>
+      
+      {isAdding && (
+        <form onSubmit={handleSubmit} className="mb-8 border-[3px] border-double border-[var(--rule)] p-6 bg-[var(--paper2)] grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1 md:col-span-2">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Title*</label>
+            <input required type="text" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Author*</label>
+            <input required type="text" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" value={formData.author} onChange={e => setFormData({...formData, author: e.target.value})} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Category*</label>
+            <select required className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
+              <option value="" disabled>Select category...</option>
+              <option value="tech">Tech</option>
+              <option value="philosophy">Philosophy</option>
+              <option value="fiction">Fiction</option>
+              <option value="non-fiction">Non-Fiction</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Year Read*</label>
+            <input required type="text" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" value={formData.yearRead} onChange={e => setFormData({...formData, yearRead: e.target.value})} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Rating* (e.g. 5/5)</label>
+            <input required type="text" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" value={formData.rating} onChange={e => setFormData({...formData, rating: e.target.value})} />
+          </div>
+          <div className="flex flex-col gap-1 md:col-span-2">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Cover Image (Optional)</label>
+            <input type="file" accept="image/*" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" onChange={e => { if (e.target.files && e.target.files[0]) setImageFile(e.target.files[0]); }} />
+          </div>
+          <div className="flex flex-col gap-1 md:col-span-2">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Purchase URL (Optional)</label>
+            <input type="text" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" value={formData.purchaseUrl} onChange={e => setFormData({...formData, purchaseUrl: e.target.value})} />
+          </div>
+          <div className="flex flex-col gap-1 md:col-span-2">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Editorial Review*</label>
+            <textarea required className="bg-[var(--paper)] border border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none min-h-[120px]" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+          </div>
+          <div className="md:col-span-2 flex gap-4 mt-2">
+            <button type="submit" className="btn-action primary px-8">{editingId ? 'Update Book' : 'Save Book'}</button>
+            <button type="button" onClick={() => { setIsAdding(false); setEditingId(null); setImageFile(null); }} className="btn-action">Cancel</button>
+          </div>
+        </form>
+      )}
+
+      {books.length === 0 && !isAdding ? (
+        <div className="border border-[var(--rule)] p-8 text-center bg-[var(--paper2)]">
+          <p className="font-mono text-sm mb-4">No books found in the catalog.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {books.map(b => (
+            <div key={b.id} className="border border-[var(--ghost)] p-4 flex justify-between items-center bg-[var(--paper2)]">
+              <div>
+                <span className="font-serif font-bold block">{b.title}</span>
+                <span className="text-[9px] font-mono text-[var(--muted)]">{b.author} · {b.category}</span>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => handleEdit(b)} className="btn-action text-[10px]">Edit</button>
+                <button onClick={() => handleDelete(b.id)} className="btn-action text-[10px] text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--paper)]">Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ManageProjects({ token }: { token: string }) {
+  const [projects, setProjects] = useState<any[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [formData, setFormData] = useState({ title: '', subtitle: '', techStack: '', content: '', liveUrl: '', githubUrl: '' });
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/projects`)
+      .then(res => res.json())
+      .then(res => setProjects(res.data || []))
+      .catch(err => console.error(err));
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const data = new FormData();
+    data.append('title', formData.title);
+    data.append('subtitle', formData.subtitle);
+    data.append('techStack', formData.techStack);
+    data.append('content', formData.content);
+    data.append('liveUrl', formData.liveUrl);
+    data.append('githubUrl', formData.githubUrl);
+
+    
+    const url = editingId ? `${API_BASE_URL}/api/projects/${editingId}` : `${API_BASE_URL}/api/projects`;
+    const method = editingId ? 'PUT' : 'POST';
+
+    const res = await fetch(url, {
+      method,
+      headers: { Authorization: `Bearer ${token}` },
+      body: data
+    });
+    
+    if (res.ok) {
+      const savedProject = await res.json();
+      if (editingId) {
+        setProjects(projects.map(p => p.id === editingId ? savedProject : p));
+      } else {
+        setProjects([savedProject, ...projects]);
+      }
+      setIsAdding(false);
+      setEditingId(null);
+      setFormData({ title: '', subtitle: '', techStack: '', content: '', liveUrl: '', githubUrl: '' });
+    }
+  };
+
+  const handleEdit = (project: any) => {
+    setFormData({
+      title: project.title || '',
+      subtitle: project.subtitle || '',
+      techStack: project.techStack || '',
+      content: project.content || '',
+      liveUrl: project.liveUrl || '',
+      githubUrl: project.githubUrl || ''
+    });
+    setEditingId(project.id);
+    setIsAdding(true);
+    window.scrollTo(0, 0);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this project?')) return;
+    const res = await fetch(`${API_BASE_URL}/api/projects/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (res.ok) {
+      setProjects(projects.filter(p => p.id !== id));
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="font-serif font-bold text-2xl mb-1">Press Room (Projects)</h2>
+          <p className="font-fell text-[var(--muted)]">Manage the headlines and featured projects.</p>
+        </div>
+        {!isAdding && (
+          <button onClick={() => {
+            setFormData({ title: '', subtitle: '', techStack: '', content: '', liveUrl: '', githubUrl: '' });
+            setEditingId(null);
+            setIsAdding(true);
+          }} className="btn-action primary">Publish Project</button>
+        )}
+      </div>
+      
+      {isAdding && (
+        <form onSubmit={handleSubmit} className="mb-8 border-[3px] border-double border-[var(--rule)] p-6 bg-[var(--paper2)] grid grid-cols-1 gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Headline / Title*</label>
+            <input required type="text" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
+          </div>
+          
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Subtitle / Lede*</label>
+            <input required type="text" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" value={formData.subtitle} onChange={e => setFormData({...formData, subtitle: e.target.value})} />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Tech Stack*</label>
+            <input required type="text" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" placeholder="React, Node, Next.js..." value={formData.techStack} onChange={e => setFormData({...formData, techStack: e.target.value})} />
+          </div>
+
+
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] tracking-[0.15em] uppercase">Live URL</label>
+              <input type="text" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" value={formData.liveUrl} onChange={e => setFormData({...formData, liveUrl: e.target.value})} />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] tracking-[0.15em] uppercase">GitHub URL</label>
+              <input type="text" className="bg-[var(--paper)] border-b border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none" value={formData.githubUrl} onChange={e => setFormData({...formData, githubUrl: e.target.value})} />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] tracking-[0.15em] uppercase">Full Story / Content*</label>
+            <textarea required className="bg-[var(--paper)] border border-[var(--ghost)] p-2 font-mono text-sm focus:border-[var(--accent)] outline-none min-h-[150px]" value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} />
+          </div>
+
+          <div className="flex gap-4 mt-2">
+            <button type="submit" className="btn-action primary px-8">{editingId ? 'Update Project' : 'Publish Project'}</button>
+            <button type="button" onClick={() => { setIsAdding(false); setEditingId(null); }} className="btn-action">Cancel</button>
+          </div>
+        </form>
+      )}
+
+      {projects.length === 0 && !isAdding ? (
+        <div className="border border-[var(--rule)] p-8 text-center bg-[var(--paper2)]">
+          <p className="font-mono text-sm mb-4">No projects found in the database.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {projects.map(p => (
+            <div key={p.id} className="border border-[var(--ghost)] p-4 flex justify-between items-center bg-[var(--paper2)]">
+              <div>
+                <span className="font-serif font-bold block">{p.title}</span>
+                <span className="text-[9px] font-mono text-[var(--muted)]">{p.techStack}</span>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => handleEdit(p)} className="btn-action text-[10px]">Edit</button>
+                <button onClick={() => handleDelete(p.id)} className="btn-action text-[10px] text-[var(--accent)] border-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--paper)]">Delete</button>
+              </div>
             </div>
           ))}
         </div>

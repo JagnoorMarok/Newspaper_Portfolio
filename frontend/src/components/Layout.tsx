@@ -3,7 +3,7 @@ import { useState, type TouchEvent } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-const ROUTES = ['/', '/gallery', '/blog', '/contact', '/admin'];
+const ROUTES = ['/', '/gallery', '/blog', '/books', '/contact', '/admin'];
 
 export default function Layout() {
   const location = useLocation();

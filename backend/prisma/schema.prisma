@@ -59,3 +59,30 @@ model GuestbookEntry {
   message   String   @db.Text
   createdAt DateTime @default(now())
 }
+
+model Book {
+  id        String   @id @default(uuid())
+  title     String
+  author    String
+  yearRead  String
+  rating    String
+  review    String   @db.Text
+  category  String
+  imageUrl  String
+  purchaseUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  subtitle    String
+  techStack   String
+  content     String   @db.Text
+  imageUrl    String
+  liveUrl     String?
+  githubUrl   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -83,14 +83,14 @@ export default function Gallery() {
           </>
         }
       />
-      <div className="p-8 border-b-2 border-[var(--rule)]">
-        <h1 className="font-serif font-black text-5xl tracking-[-0.03em]">The Sketchbook</h1>
-        <div className="text-[10px] tracking-[0.15em] uppercase text-[var(--muted)] mt-2">
+      <div className="py-8 border-b-[3px] border-double border-[var(--ink)]">
+        <h1 className="font-serif font-black text-4xl md:text-6xl lg:text-8xl tracking-[-0.03em] text-center uppercase">The Sketchbook</h1>
+        <div className="text-xs md:text-sm tracking-[0.2em] uppercase text-[var(--ink)] mt-4 text-center border-y border-[var(--ghost)] py-2 font-mono">
           Original Pencil Works · Available for Acquisition · Updated Periodically
         </div>
       </div>
       
-      <div className="flex overflow-x-auto no-scrollbar border-b border-[var(--rule)] px-4 md:px-8 w-full -mx-4 md:mx-0">
+      <div className="flex overflow-x-auto no-scrollbar border-b border-[var(--rule)] w-full mb-8">
         {['all', 'portrait', 'landscape', 'figure'].map(cat => (
           <button 
             key={cat}
@@ -106,7 +106,7 @@ export default function Gallery() {
         {filtered.map(sketch => (
           <div 
             key={sketch.id} 
-            className="break-inside-avoid bg-paper mb-4 cursor-pointer relative overflow-hidden group border border-[var(--rule)]"
+            className="break-inside-avoid bg-paper mb-4 cursor-pointer relative overflow-hidden group border border-[var(--rule)] rounded-md"
             onClick={() => setSelectedSketch(sketch)}
           >
             <div className="w-full overflow-hidden bg-transparent flex items-center justify-center">
@@ -143,7 +143,7 @@ export default function Gallery() {
               animate={{ scale: 1, rotate: 0 }}
               exit={{ scale: 0.95, rotate: -0.5 }}
               onClick={e => e.stopPropagation()}
-              className="bg-paper max-w-[900px] w-[90vw] max-h-[90vh] overflow-auto border-[4px] border-[var(--ink)] flex flex-col"
+              className="bg-paper max-w-[900px] w-[90vw] max-h-[90vh] overflow-auto border-[4px] border-[var(--ink)] flex flex-col rounded-md"
             >
               <div className="p-4 md:p-6 border-b-[3px] border-double border-[var(--rule)] flex justify-between items-center">
                 <div>

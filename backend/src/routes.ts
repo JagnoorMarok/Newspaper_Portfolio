@@ -190,6 +190,116 @@ router.delete('/sketches/:id', requireAdmin, asyncHandler(async (req, res) => {
 }));
 
 // =======================
+// BOOKS (The Library)
+// =======================
+router.get('/books', asyncHandler(async (req, res) => {
+  const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+  const cursor = req.query.cursor as string | undefined;
+
+  if (limit) {
+    const books = await prisma.book.findMany({
+      take: limit + 1,
+      ...(cursor && {
+        skip: 1,
+        cursor: { id: cursor }
+      }),
+      orderBy: { createdAt: 'desc' }
+    });
+    
+    let hasMore = false;
+    if (books.length > limit) {
+      hasMore = true;
+      books.pop();
+    }
+    res.json({ data: books, hasMore });
+  } else {
+    const books = await prisma.book.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json({ data: books, hasMore: false });
+  }
+}));
+
+router.post('/books', requireAdmin, upload.single('image'), asyncHandler(async (req, res) => {
+  const { title, author, yearRead, rating, review, category, purchaseUrl } = req.body;
+  let imageUrl = req.body.imageUrl || 'mock'; // Default to mock if no image provided and no file uploaded
+
+  if (req.file) {
+    let buffer = req.file.buffer;
+    let contentType = req.file.mimetype;
+    let fileName = req.file.originalname;
+
+    if (contentType.startsWith('image/')) {
+      buffer = await sharp(req.file.buffer)
+        .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
+        .jpeg({ quality: 80, progressive: true })
+        .toBuffer();
+      contentType = 'image/jpeg';
+      fileName = fileName.replace(/\.[^/.]+$/, "") + ".jpeg";
+    }
+
+    const uniqueFileName = `${Date.now()}-${fileName.replace(/\s/g, '_')}`;
+    const { error } = await supabase.storage
+      .from('sketches') // Reusing the 'sketches' bucket for books cover images for simplicity
+      .upload(uniqueFileName, buffer, {
+        contentType: contentType,
+      });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from('sketches')
+      .getPublicUrl(uniqueFileName);
+
+    imageUrl = publicUrlData.publicUrl;
+  }
+
+  const book = await prisma.book.create({ 
+    data: { title, author, yearRead, rating, review, category, imageUrl, purchaseUrl }
+  });
+  res.status(201).json(book);
+}));
+
+router.put('/books/:id', requireAdmin, upload.single('image'), asyncHandler(async (req, res) => {
+  const { title, author, yearRead, rating, review, category, purchaseUrl } = req.body;
+  let updateData: any = { title, author, yearRead, rating, review, category, purchaseUrl };
+
+  if (req.file) {
+    const fileName = `${Date.now()}-${req.file.originalname.replace(/\s/g, '_')}`;
+    const { error } = await supabase.storage
+      .from('sketches')
+      .upload(fileName, req.file.buffer, {
+        contentType: req.file.mimetype,
+      });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from('sketches')
+      .getPublicUrl(fileName);
+
+    updateData.imageUrl = publicUrlData.publicUrl;
+  } else if (req.body.imageUrl) {
+    updateData.imageUrl = req.body.imageUrl;
+  }
+
+  const book = await prisma.book.update({
+    where: { id: req.params.id as string },
+    data: updateData
+  });
+  res.json(book);
+}));
+
+router.delete('/books/:id', requireAdmin, asyncHandler(async (req, res) => {
+  await prisma.book.delete({ where: { id: req.params.id as string } });
+  res.json({ success: true });
+}));
+
+// =======================
 // BLOG POSTS
 // =======================
 router.get('/blogs', asyncHandler(async (req, res) => {
@@ -305,6 +415,116 @@ router.put('/settings', requireAdmin, asyncHandler(async (req, res) => {
     create: { id: 'global', ...req.body }
   });
   res.json(settings);
+}));
+
+// =======================
+// PROJECTS (The Press Room)
+// =======================
+router.get('/projects', asyncHandler(async (req, res) => {
+  const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+  const cursor = req.query.cursor as string | undefined;
+
+  if (limit) {
+    const projects = await prisma.project.findMany({
+      take: limit + 1,
+      ...(cursor && {
+        skip: 1,
+        cursor: { id: cursor }
+      }),
+      orderBy: { createdAt: 'desc' }
+    });
+    
+    let hasMore = false;
+    if (projects.length > limit) {
+      hasMore = true;
+      projects.pop();
+    }
+    res.json({ data: projects, hasMore });
+  } else {
+    const projects = await prisma.project.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json({ data: projects, hasMore: false });
+  }
+}));
+
+router.post('/projects', requireAdmin, upload.single('image'), asyncHandler(async (req, res) => {
+  const { title, subtitle, techStack, content, liveUrl, githubUrl } = req.body;
+  let imageUrl = req.body.imageUrl || 'mock'; 
+
+  if (req.file) {
+    let buffer = req.file.buffer;
+    let contentType = req.file.mimetype;
+    let fileName = req.file.originalname;
+
+    if (contentType.startsWith('image/')) {
+      buffer = await sharp(req.file.buffer)
+        .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
+        .jpeg({ quality: 80, progressive: true })
+        .toBuffer();
+      contentType = 'image/jpeg';
+      fileName = fileName.replace(/\.[^/.]+$/, "") + ".jpeg";
+    }
+
+    const uniqueFileName = `${Date.now()}-${fileName.replace(/\s/g, '_')}`;
+    const { error } = await supabase.storage
+      .from('sketches')
+      .upload(uniqueFileName, buffer, {
+        contentType: contentType,
+      });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from('sketches')
+      .getPublicUrl(uniqueFileName);
+
+    imageUrl = publicUrlData.publicUrl;
+  }
+
+  const project = await prisma.project.create({ 
+    data: { title, subtitle, techStack, content, imageUrl, liveUrl, githubUrl }
+  });
+  res.status(201).json(project);
+}));
+
+router.put('/projects/:id', requireAdmin, upload.single('image'), asyncHandler(async (req, res) => {
+  const { title, subtitle, techStack, content, liveUrl, githubUrl } = req.body;
+  let updateData: any = { title, subtitle, techStack, content, liveUrl, githubUrl };
+
+  if (req.file) {
+    const fileName = `${Date.now()}-${req.file.originalname.replace(/\s/g, '_')}`;
+    const { error } = await supabase.storage
+      .from('sketches')
+      .upload(fileName, req.file.buffer, {
+        contentType: req.file.mimetype,
+      });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from('sketches')
+      .getPublicUrl(fileName);
+
+    updateData.imageUrl = publicUrlData.publicUrl;
+  } else if (req.body.imageUrl) {
+    updateData.imageUrl = req.body.imageUrl;
+  }
+
+  const project = await prisma.project.update({
+    where: { id: req.params.id as string },
+    data: updateData
+  });
+  res.json(project);
+}));
+
+router.delete('/projects/:id', requireAdmin, asyncHandler(async (req, res) => {
+  await prisma.project.delete({ where: { id: req.params.id as string } });
+  res.json({ success: true });
 }));
 
 export default router;

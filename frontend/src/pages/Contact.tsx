@@ -52,11 +52,11 @@ export default function Contact() {
         transition={{ duration: 0.3 }}
         className="container mx-auto px-8"
       >
-        <div className="py-12 border-b-2 border-[var(--rule)]">
-          <h1 className="font-serif font-black text-6xl tracking-[-0.03em] mb-4 text-center md:text-left">The Dispatch</h1>
-          <p className="font-fell text-lg text-[var(--muted)] text-center md:text-left">
+        <div className="py-8 border-b-[3px] border-double border-[var(--ink)] mb-8">
+          <h1 className="font-serif font-black text-4xl md:text-6xl lg:text-8xl tracking-[-0.03em] text-center uppercase">The Dispatch</h1>
+          <div className="text-xs md:text-sm tracking-[0.2em] uppercase text-[var(--ink)] mt-4 text-center border-y border-[var(--ghost)] py-2 font-mono">
             Correspondence is welcomed. All enquiries receive a considered reply.
-          </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-12 py-12">

@@ -6,6 +6,9 @@ import Blog from './pages/Blog';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 import NotForSale from './pages/NotForSale';
+import Books from './pages/Books';
+import Classifieds from './pages/Classifieds';
+import PressRoom from './pages/PressRoom';
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="blog" element={<Blog />} />
+          <Route path="books" element={<Books />} />
+          <Route path="press" element={<PressRoom />} />
+          <Route path="classifieds" element={<Classifieds />} />
           <Route path="contact" element={<Contact />} />
           <Route path="admin" element={<Admin />} />
           <Route path="NA" element={<NotForSale />} />
