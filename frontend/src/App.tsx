@@ -12,6 +12,7 @@ const Classifieds = lazy(() => import('./pages/Classifieds'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Admin = lazy(() => import('./pages/Admin'));
 const NotForSale = lazy(() => import('./pages/NotForSale'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="admin" element={<Admin />} />
             <Route path="NA" element={<NotForSale />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </BrowserRouter>
