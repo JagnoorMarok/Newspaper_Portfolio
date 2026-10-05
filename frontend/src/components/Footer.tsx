@@ -1,39 +1,19 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CoffeeStain from './CoffeeStain';
 import { Coffee, Lock } from 'lucide-react';
-import { API_BASE_URL } from '../config';
+import { useSettings } from '../context/SettingsContext';
 
 export default function Footer() {
-  const [links, setLinks] = useState({
-    github: 'https://github.com/JagnoorMarok',
-    linkedin: 'https://linkedin.com/in/jagnoormarok',
-    instagram: 'https://instagram.com/jagnoormarok'
-  });
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/settings`)
-      .then(res => res.json())
-      .then(data => {
-        if (data) {
-          setLinks({
-            github: data.github?.trim() || 'https://github.com/JagnoorMarok',
-            linkedin: data.linkedin?.trim() || 'https://linkedin.com/in/jagnoormarok',
-            instagram: data.instagram?.trim() || 'https://instagram.com/jagnoormarok'
-          });
-        }
-      })
-      .catch(err => console.error('Failed to load settings in footer:', err));
-  }, []);
+  const { settings } = useSettings();
 
   const formatUrl = (url: string) => {
     if (!url) return '';
     return /^https?:\/\//i.test(url) ? url : `https://${url}`;
   };
 
-  const githubUrl = formatUrl(links.github) || 'https://github.com/JagnoorMarok';
-  const linkedinUrl = formatUrl(links.linkedin) || 'https://linkedin.com/in/jagnoormarok';
-  const instagramUrl = formatUrl(links.instagram) || 'https://instagram.com/jagnoormarok';
+  const githubUrl = formatUrl(settings.github) || 'https://github.com/JagnoorMarok';
+  const linkedinUrl = formatUrl(settings.linkedin) || 'https://linkedin.com/in/jagnoormarok';
+  const instagramUrl = formatUrl(settings.instagram) || 'https://instagram.com/jagnoormarok';
 
   return (
     <footer className="border-t-[3px] border-double border-[var(--rule)] pt-8 md:pt-12 pb-6 mt-16 px-4 md:px-8 container mx-auto relative">

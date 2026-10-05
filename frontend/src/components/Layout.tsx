@@ -1,9 +1,21 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect, type TouchEvent } from 'react';
+import { useState, useEffect, Suspense, type TouchEvent } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
 const ROUTES = ['/', '/gallery', '/blog', '/press', '/books', '/classifieds', '/contact'];
+
+function PageLoader() {
+  return (
+    <div className="container mx-auto px-8 min-h-[60vh] flex flex-col items-center justify-center font-mono text-xs uppercase tracking-widest text-[var(--muted)]">
+      <div className="border border-[var(--ghost)] p-6 md:p-8 bg-[var(--paper2)] flex flex-col items-center gap-3 text-center">
+        <span className="font-serif italic text-base md:text-lg text-[var(--ink)]">Typesetting Broadsheet...</span>
+        <div className="w-16 h-[2px] bg-[var(--ink)] animate-pulse" />
+        <span className="text-[9px] tracking-[0.2em] text-[var(--ghost)]">Please stand by</span>
+      </div>
+    </div>
+  );
+}
 
 export default function Layout() {
   const location = useLocation();
@@ -76,7 +88,9 @@ export default function Layout() {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        <Outlet />
+        <Suspense fallback={<PageLoader />}>
+          <Outlet />
+        </Suspense>
       </main>
       <Footer />
     </>

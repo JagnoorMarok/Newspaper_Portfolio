@@ -1,19 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { API_BASE_URL } from '../config';
 import SEO from '../components/SEO';
+import { useSettings } from '../context/SettingsContext';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', type: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [links, setLinks] = useState({ instagram: '', linkedin: '', github: '' });
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/settings`)
-      .then(res => res.json())
-      .then(data => setLinks(data))
-      .catch(err => console.error(err));
-  }, []);
+  const { settings: links } = useSettings();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { API_BASE_URL } from '../config';
+import { useSettings } from '../context/SettingsContext';
 import MDEditor from '@uiw/react-md-editor';
 
 export default function Admin() {
@@ -508,23 +509,21 @@ function ManageMessages({ token }: { token: string }) {
 }
 
 function ManageLinks({ token }: { token: string }) {
-  const [formData, setFormData] = useState({ instagram: '', linkedin: '', github: '' });
-  const [loading, setLoading] = useState(true);
+  const { settings, loading, refreshSettings } = useSettings();
+  const [formData, setFormData] = useState({ 
+    instagram: settings.instagram || '', 
+    linkedin: settings.linkedin || '', 
+    github: settings.github || '' 
+  });
   const [status, setStatus] = useState('');
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/settings`)
-      .then(res => res.json())
-      .then(data => {
-        setFormData({
-          instagram: data.instagram || '',
-          linkedin: data.linkedin || '',
-          github: data.github || ''
-        });
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+    setFormData({
+      instagram: settings.instagram || '',
+      linkedin: settings.linkedin || '',
+      github: settings.github || ''
+    });
+  }, [settings]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -541,6 +540,7 @@ function ManageLinks({ token }: { token: string }) {
       });
       
       if (res.ok) {
+        await refreshSettings();
         setStatus('Settings updated successfully.');
         setTimeout(() => setStatus(''), 3000);
       } else {
