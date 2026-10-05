@@ -13,10 +13,13 @@ export default function SEO({
   description, 
   type = 'website',
   name = 'Jagnoor Singh Marok',
-  image = '/favicon.svg'
+  image = '/favicon.png'
 }: SEOProps) {
   const fullTitle = title ? `${title} | ${name}` : `The Marok Gazette | ${name}`;
   const metaDescription = description || "The personal portfolio and chronicle of Jagnoor Singh Marok: Computer Engineer, Designer, and Sketcher of Worlds.";
+  const fullImage = image.startsWith('http://') || image.startsWith('https://')
+    ? image
+    : `https://jagnoormarok.dev${image.startsWith('/') ? '' : '/'}${image}`;
 
   return (
     <Helmet>
@@ -28,14 +31,14 @@ export default function SEO({
       <meta property="og:type" content={type} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={metaDescription} />
-      {image && <meta property="og:image" content={image} />}
+      <meta property="og:image" content={fullImage} />
       
       {/* Twitter tags */}
       <meta name="twitter:creator" content={name} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={metaDescription} />
-      {image && <meta name="twitter:image" content={image} />}
+      <meta name="twitter:image" content={fullImage} />
     </Helmet>
   );
 }
