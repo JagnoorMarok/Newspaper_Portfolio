@@ -3,7 +3,7 @@ import { useState, useEffect, Suspense, type TouchEvent } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-const ROUTES = ['/', '/gallery', '/blog', '/press', '/books', '/classifieds', '/contact'];
+const ROUTES = ['/', '/gallery', '/blog', '/press', '/books', '/classifieds', '/playground', '/contact'];
 
 function PageLoader() {
   return (

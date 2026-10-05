@@ -79,6 +79,7 @@ export default function Navbar() {
         <NavButton to="/press">Press Room</NavButton>
         <NavButton to="/books">Library</NavButton>
         <NavButton to="/classifieds">Classifieds</NavButton>
+        <NavButton to="/playground">Playground</NavButton>
         <NavButton to="/contact">Dispatch</NavButton>
       </div>
     </nav>

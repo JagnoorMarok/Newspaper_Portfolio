@@ -10,6 +10,7 @@ const Books = lazy(() => import('./pages/Books'));
 const PressRoom = lazy(() => import('./pages/PressRoom'));
 const Classifieds = lazy(() => import('./pages/Classifieds'));
 const Contact = lazy(() => import('./pages/Contact'));
+const Playground = lazy(() => import('./pages/Playground'));
 const Admin = lazy(() => import('./pages/Admin'));
 const NotForSale = lazy(() => import('./pages/NotForSale'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -26,6 +27,7 @@ function App() {
             <Route path="books" element={<Books />} />
             <Route path="press" element={<PressRoom />} />
             <Route path="classifieds" element={<Classifieds />} />
+            <Route path="playground" element={<Playground />} />
             <Route path="contact" element={<Contact />} />
             <Route path="admin" element={<Admin />} />
             <Route path="NA" element={<NotForSale />} />
