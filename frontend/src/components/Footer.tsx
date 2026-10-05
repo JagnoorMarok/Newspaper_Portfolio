@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import CoffeeStain from './CoffeeStain';
-import { Coffee } from 'lucide-react';
+import { Coffee, Lock } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 
 export default function Footer() {
@@ -102,16 +103,26 @@ export default function Footer() {
           All Works © Jagnoor Singh Marok. All Rights Reserved.
         </p>
 
-        <button
-          onClick={() => {
-            localStorage.removeItem('foundStains');
-            window.location.reload();
-          }}
-          title="Clean up all coffee stains"
-          className="absolute right-0 -top-4 w-8 h-8 rounded-full border border-[var(--rule)] flex items-center justify-center text-[var(--ghost)] hover:text-[var(--ink)] hover:border-[var(--ink)] hover:bg-[var(--paper2)] transition-colors bg-[var(--paper)]"
-        >
-          <Coffee size={14} />
-        </button>
+        <div className="flex md:absolute md:right-0 md:-top-4 items-center gap-2 mt-4 md:mt-0">
+          <Link
+            to="/admin"
+            title="Editor's Desk (Ctrl + Shift + E)"
+            aria-label="Editor's Desk"
+            className="w-8 h-8 rounded-full border border-[var(--rule)] flex items-center justify-center text-[var(--ghost)] hover:text-[var(--ink)] hover:border-[var(--ink)] hover:bg-[var(--paper2)] transition-colors bg-[var(--paper)]"
+          >
+            <Lock size={12} />
+          </Link>
+          <button
+            onClick={() => {
+              localStorage.removeItem('foundStains');
+              window.location.reload();
+            }}
+            title="Clean up all coffee stains"
+            className="w-8 h-8 rounded-full border border-[var(--rule)] flex items-center justify-center text-[var(--ghost)] hover:text-[var(--ink)] hover:border-[var(--ink)] hover:bg-[var(--paper2)] transition-colors bg-[var(--paper)]"
+          >
+            <Coffee size={14} />
+          </button>
+        </div>
       </div>
     </footer>
   );

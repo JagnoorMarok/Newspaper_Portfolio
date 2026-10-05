@@ -80,7 +80,6 @@ export default function Navbar() {
         <NavButton to="/books">Library</NavButton>
         <NavButton to="/classifieds">Classifieds</NavButton>
         <NavButton to="/contact">Dispatch</NavButton>
-        <NavButton to="/admin">Editor's Room</NavButton>
       </div>
     </nav>
   );

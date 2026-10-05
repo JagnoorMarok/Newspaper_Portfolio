@@ -1,15 +1,28 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useState, type TouchEvent } from 'react';
+import { useState, useEffect, type TouchEvent } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-const ROUTES = ['/', '/gallery', '/blog', '/books', '/contact', '/admin'];
+const ROUTES = ['/', '/gallery', '/blog', '/press', '/books', '/classifieds', '/contact'];
 
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [touchStart, setTouchStart] = useState<{ x: number, y: number } | null>(null);
   const [touchEnd, setTouchEnd] = useState<{ x: number, y: number } | null>(null);
+
+  // Global shortcut to open Editor's Room (Ctrl + Shift + E or Cmd + Shift + E)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'e') {
+        e.preventDefault();
+        navigate('/admin');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
 
   const minSwipeDistance = 75; 
 
