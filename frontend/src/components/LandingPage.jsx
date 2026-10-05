@@ -358,22 +358,21 @@ export default function LandingPage({ onSelectComponent }) {
       <header className="landing-hero">
         <div className="hero-pill">
           <span className="pulsing-dot" />
-          <span className="pill-text">LABORATORY EXPERIMENTS // 13 LIVE COMPONENTS</span>
+          <span className="pill-text">SECTION IV: THE DIGITAL WORKSHOP · 28 LIVE APPARATUS</span>
         </div>
 
         <h1 className="hero-title">
-          Spatial interfaces, <br />
-          <span className="hero-gradient-text">motion physics</span> & canvas shaders.
+          Kinetic Apparatus, <br />
+          <span className="hero-gradient-text">spatial motion</span> & webgl shaders.
         </h1>
 
         <p className="hero-subtitle">
-          An art-directed gallery of experimental React UI components. Crafted for creative developers, 
-          product designers, and explorers who want to break away from predictable web interfaces.
+          An art-directed gallery of experimental React UI components, physics engines, and creative mathematics. Published periodically for creative developers, typographers, and curious explorers of the digital broadsheet.
         </p>
 
         <div className="hero-actions">
           <button className="btn-primary" onClick={scrollToGrid}>
-            <span>Explore Collection</span>
+            <span>Examine Collection</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <polyline points="19 12 12 19 5 12"></polyline>
@@ -389,8 +388,8 @@ export default function LandingPage({ onSelectComponent }) {
         {/* Stats Strip */}
         <div className="hero-stats">
           <div className="stat-card">
-            <span className="stat-number">13</span>
-            <span className="stat-label">Bespoke Components</span>
+            <span className="stat-number">28</span>
+            <span className="stat-label">Bespoke Apparatus</span>
           </div>
           <div className="stat-divider" />
           <div className="stat-card">
@@ -526,12 +525,12 @@ export default function LandingPage({ onSelectComponent }) {
       <footer className="landing-footer">
         <div className="footer-content">
           <div className="footer-brand">
-            <h4>KINETIC // UI EXPERIMENTS</h4>
-            <p>Crafted with React 19, Three.js, GSAP, and hardware-accelerated CSS 3D.</p>
+            <h4>THE MAROK GAZETTE // THE WORKSHOP</h4>
+            <p>Printed with React 19, Three.js, WebGL Shaders, GSAP, and broadsheet typography.</p>
           </div>
           <div className="footer-actions">
             <button className="footer-cta-btn" onClick={handleRandomExperiment}>
-              Launch Random Demo →
+              Launch Random Apparatus →
             </button>
             <button className="footer-scroll-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               ↑ Back to top

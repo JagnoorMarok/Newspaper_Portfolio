@@ -97,8 +97,8 @@ export default function Playground() {
       <aside className={`sidebar ${!isSidebarOpen ? 'closed' : ''}`}>
         <div className="sidebar-header">
           <div className="brand-logo" onClick={() => handleTabClick('home')} style={{ cursor: 'pointer' }}>
-            <h1>Components</h1>
-            <span className="brand-badge">LAB</span>
+            <h1>The Workshop</h1>
+            <span className="brand-badge">FOLIO IV // LAB</span>
           </div>
           <button className="close-btn" onClick={() => setIsSidebarOpen(false)} aria-label="Close Navigation">&times;</button>
         </div>
@@ -107,7 +107,7 @@ export default function Playground() {
             className={`nav-link nav-link-overview ${activeTab === 'home' ? 'active' : ''}`}
             onClick={() => handleTabClick('home')}
           >
-            <span className="nav-icon">✦</span> Overview / Home
+            <span className="nav-icon">✦</span> Section Index
           </div>
           <div className="nav-divider" />
           <div 
@@ -295,13 +295,13 @@ export default function Playground() {
               <button 
                 className="back-showcase-btn" 
                 onClick={() => handleTabClick('home')}
-                title="Return to Component Showcase"
+                title="Return to Workshop Index"
               >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="19" y1="12" x2="5" y2="12"></line>
                   <polyline points="12 19 5 12 12 5"></polyline>
                 </svg>
-                <span>Back to Showcase</span>
+                <span>← Index</span>
               </button>
               <span className="breadcrumb-separator">/</span>
               <span className="breadcrumb-current">{COMPONENT_TITLES[activeTab] || 'Experiment'}</span>
@@ -314,15 +314,27 @@ export default function Playground() {
                 }}
                 title="Scroll down to inspect source code and architecture"
               >
-                <span>Code & Architecture ↓</span>
+                <span>Blueprint & Notes ↓</span>
               </button>
             </div>
           ) : (
             <div className="top-bar-home-brand">
-              <span className="home-status-tag">✦ LIVE ARCHIVE</span>
+              <span className="home-status-tag">✦ SECTION IV · THE WORKSHOP</span>
             </div>
           )}
         </div>
+
+        {activeTab !== 'home' && (
+          <div className="specimen-masthead">
+            <div>
+              <span className="specimen-title">{COMPONENT_TITLES[activeTab] || 'APPARATUS'}</span>
+              <span style={{ marginLeft: '10px', color: 'var(--accent)' }}>// SPECIMEN {activeTab.toUpperCase()}</span>
+            </div>
+            <div className="hidden sm:block">
+              <span>BROADSHEET FOLIO · LIVE RUNTIME</span>
+            </div>
+          </div>
+        )}
 
         {activeTab === 'home' && (
           <LandingPage onSelectComponent={(tab) => handleTabClick(tab)} />
@@ -413,7 +425,7 @@ export default function Playground() {
         )}
 
         {activeTab === 'floating-dock' && (
-          <div className="floating-dock-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a', position: 'relative' }}>
+          <div className="floating-dock-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--paper2)', position: 'relative' }}>
              <FloatingDockDemo />
           </div>
         )}
