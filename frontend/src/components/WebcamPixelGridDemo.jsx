@@ -25,7 +25,7 @@ export function WebcamPixelGridDemo() {
   }, []);
 
   return (
-    <div className="relative h-screen w-screen bg-black overflow-hidden webcam-demo-root">
+    <div className="relative h-full w-full min-h-[500px] bg-black overflow-hidden webcam-demo-root">
       {/* Webcam pixel grid background */}
       <div className="absolute inset-0">
         <WebcamPixelGrid

@@ -26,7 +26,7 @@ export default function WisprFlowDemo() {
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", minHeight: "520px", overflow: "hidden" }}>
       <WisprFlowTextAnimation
         text={PRESET_TEXTS[activePreset]}
         speed={speed}

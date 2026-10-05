@@ -31,7 +31,7 @@ export default function InterfaceCraftsDemo() {
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", minHeight: "520px", overflow: "hidden" }}>
       {/* Top Floating Hint */}
       <div className="interface-crafts-hint">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

@@ -297,169 +297,169 @@ export default function Playground() {
           )}
 
           {activeTab === 'eclipse' && (
-            <div className="playground-demo-stage eclipse-stage">
+            <div className="playground-demo-stage stage-flow eclipse-stage">
               <EclipseDemo />
             </div>
           )}
 
           {activeTab === 'glitch-text' && (
-            <div className="playground-demo-stage glitch-text-stage">
+            <div className="playground-demo-stage stage-flow glitch-text-stage">
               <GlitchTextDemo />
             </div>
           )}
 
           {activeTab === 'ascii-ripple' && (
-            <div className="playground-demo-stage ascii-ripple-stage">
+            <div className="playground-demo-stage stage-flow ascii-ripple-stage">
               <AsciiRippleDemo />
             </div>
           )}
 
           {activeTab === 'text-loop' && (
-            <div className="playground-demo-stage text-loop-stage">
+            <div className="playground-demo-stage stage-flow text-loop-stage">
               <TextLoopDemo />
             </div>
           )}
 
           {activeTab === 'kinetic-text' && (
-            <div className="playground-demo-stage kinetic-text-stage">
+            <div className="playground-demo-stage stage-flow kinetic-text-stage">
               <KineticTextDemo />
             </div>
           )}
 
           {activeTab === 'cursor-particles-typography' && (
-            <div className="playground-demo-stage cursor-particles-stage">
+            <div className="playground-demo-stage stage-flow cursor-particles-stage">
               <CursorParticlesTypographyDemo />
             </div>
           )}
 
           {activeTab === 'ink-reveal' && (
-            <div className="playground-demo-stage ink-reveal-stage">
+            <div className="playground-demo-stage stage-flow ink-reveal-stage">
               <InkRevealDemo />
             </div>
           )}
 
           {activeTab === 'image-stack' && (
-            <div className="playground-demo-stage image-stack-stage">
+            <div className="playground-demo-stage stage-flow image-stack-stage">
               <ImageStackDemo />
             </div>
           )}
 
           {activeTab === 'water-ripple-image' && (
-            <div className="playground-demo-stage water-ripple-stage">
+            <div className="playground-demo-stage stage-flow water-ripple-stage">
               <WaterRippleImageDemo />
             </div>
           )}
 
           {activeTab === 'morph-gallery' && (
-            <div className="playground-demo-stage morph-gallery-stage">
+            <div className="playground-demo-stage stage-flow morph-gallery-stage">
               <MorphGalleryDemo />
             </div>
           )}
 
           {activeTab === 'stack-tower' && (
-            <div className="playground-demo-stage stack-tower-stage">
+            <div className="playground-demo-stage stage-flow stack-tower-stage">
               <StackTowerDemo />
             </div>
           )}
 
           {activeTab === 'constellation-field' && (
-            <div className="playground-demo-stage constellation-field-stage">
+            <div className="playground-demo-stage stage-flow constellation-field-stage">
               <ConstellationFieldDemo />
             </div>
           )}
 
           {activeTab === 'interface-crafts' && (
-            <div className="playground-demo-stage interface-crafts-stage">
+            <div className="playground-demo-stage stage-spatial interface-crafts-stage">
               <InterfaceCraftsDemo />
             </div>
           )}
 
           {activeTab === 'wispr-flow' && (
-            <div className="playground-demo-stage wispr-flow-stage">
+            <div className="playground-demo-stage stage-spatial wispr-flow-stage">
               <WisprFlowDemo />
             </div>
           )}
 
           {activeTab === 'floating-dock' && (
-            <div className="playground-demo-stage floating-dock-stage">
+            <div className="playground-demo-stage stage-spatial floating-dock-stage">
               <FloatingDockDemo />
             </div>
           )}
 
           {activeTab === 'image-spring' && (
-            <div className="playground-demo-stage image-spring-stage">
+            <div className="playground-demo-stage stage-spatial image-spring-stage">
               <ImageSpring />
             </div>
           )}
 
           {activeTab === 'webcam-pixel-grid' && (
-            <div className="playground-demo-stage webcam-pixel-grid-stage">
+            <div className="playground-demo-stage stage-spatial webcam-pixel-grid-stage">
               <WebcamPixelGridDemo />
             </div>
           )}
 
           {activeTab === 'image-trail' && (
-            <div className="playground-demo-stage image-trail-stage">
+            <div className="playground-demo-stage stage-spatial image-trail-stage">
               <ImageTrail />
             </div>
           )}
 
           {activeTab === 'card-globe' && (
-            <div className="playground-demo-stage card-globe-stage">
+            <div className="playground-demo-stage stage-spatial card-globe-stage">
               <CardGlobe />
             </div>
           )}
 
           {activeTab === 'card-tunnel' && (
-            <div className="playground-demo-stage card-tunnel-stage">
+            <div className="playground-demo-stage stage-spatial card-tunnel-stage">
               <CardTunnel />
             </div>
           )}
 
           {activeTab === 'card-toss' && (
-            <div className="playground-demo-stage card-toss-stage">
+            <div className="playground-demo-stage stage-spatial card-toss-stage">
               <CardToss />
             </div>
           )}
 
           {activeTab === 'video-collage' && (
-            <div className="playground-demo-stage video-collage-stage">
+            <div className="playground-demo-stage stage-spatial video-collage-stage">
               <VideoReferenceCollage />
             </div>
           )}
 
           {activeTab === 'card-collage' && (
-            <div className="playground-demo-stage card-collage-stage">
+            <div className="playground-demo-stage stage-spatial card-collage-stage">
               <AnimatedCardCollage />
             </div>
           )}
 
           {activeTab === 'threed-card-ring' && (
-            <div className="playground-demo-stage threed-card-ring-stage">
+            <div className="playground-demo-stage stage-spatial threed-card-ring-stage">
               <ThreeDCardRing />
             </div>
           )}
 
           {activeTab === 'grainy-carousel' && (
-            <div className="playground-demo-stage grainy-carousel-stage">
+            <div className="playground-demo-stage stage-spatial grainy-carousel-stage">
               <GrainyCarousel />
             </div>
           )}
 
           {activeTab === 'focus-slice' && (
-            <div className="playground-demo-stage focus-slice-stage">
+            <div className="playground-demo-stage stage-spatial focus-slice-stage">
               <FocusSliceCarousel />
             </div>
           )}
 
           {activeTab === 'magazine' && (
-            <div className="playground-demo-stage magazine-stage">
+            <div className="playground-demo-stage stage-spatial magazine-stage">
               <Magazine />
             </div>
           )}
 
           {activeTab === 'buttons' && (
-            <div className="playground-demo-stage buttons-stage">
+            <div className="playground-demo-stage stage-flow buttons-stage">
               <main className="main-content">
                 <header className="showcase-header">
                   <h2>Buttons</h2>

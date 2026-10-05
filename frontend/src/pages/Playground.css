@@ -491,13 +491,45 @@
 .playground-demo-stage {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 160px);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   isolation: isolate;
   z-index: 1;
   background-color: var(--paper);
+}
+
+/* Category B: Flow demos with control panels below canvas */
+.playground-demo-stage.stage-flow {
+  min-height: auto;
+  height: auto;
+  overflow: visible;
+}
+
+/* Category A: Full-viewport 3D spatial demos */
+.playground-demo-stage.stage-spatial {
+  height: calc(100vh - 175px);
+  min-height: 520px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ensure Category A roots adapt to container height so bottom HUDs are never pushed below fold */
+.stage-spatial > div,
+.stage-spatial .card-globe-root,
+.stage-spatial .card-tunnel-root,
+.stage-spatial .card-toss-root,
+.stage-spatial .image-spring-root,
+.stage-spatial .image-trail-root,
+.stage-spatial .card-ring-root,
+.stage-spatial .collage-root,
+.stage-spatial .video-collage-root,
+.stage-spatial .grainy-carousel-root,
+.stage-spatial .magazine-root,
+.stage-spatial .webcam-demo-root {
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  width: 100% !important;
 }
 
 /* Buttons demo layout */
@@ -568,13 +600,13 @@
     width: 100% !important;
     max-width: 100vw;
     overflow-x: hidden;
-    padding-bottom: 58px; /* space for mobile bottom bar */
+    padding-bottom: 74px; /* clearance for mobile bottom bar */
   }
 
-  /* Mobile Top Bar (Sticky under fixed navbar) */
+  /* Mobile Top Bar (Relative so it never covers canvas or titles when scrolling) */
   .top-bar {
-    position: sticky;
-    top: 86px;
+    position: relative;
+    top: auto;
     padding: 0.6rem 0.85rem;
     z-index: 30;
   }
@@ -620,10 +652,27 @@
     display: none;
   }
 
-  /* Mobile Demo Stage: 70vh gives room to scroll down to notes without touch-trap */
-  .playground-demo-stage {
-    min-height: 68vh;
-    height: 68vh;
+  /* Mobile Demo Stage: flow stages are natural auto height so controls are never clipped */
+  .playground-demo-stage.stage-flow {
+    min-height: auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Spatial 3D demos adapt to mobile viewport cleanly */
+  .playground-demo-stage.stage-spatial {
+    height: calc(100svh - 180px);
+    min-height: 440px;
+  }
+
+  /* Ensure floating HUDs inside spatial demos stay above the bottom edge */
+  .card-globe-hud,
+  .card-tunnel-hud,
+  .card-toss-hud,
+  .trail-hud,
+  .image-spring-hud,
+  .wispr-controls-hud {
+    bottom: 12px !important;
   }
 
   /* Mobile Bottom Navigation Bar (z-index: 45) */
