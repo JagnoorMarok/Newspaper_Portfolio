@@ -60,6 +60,11 @@ export default function Layout() {
     const yDistance = touchStart.y - touchEnd.y;
     
     // Ensure horizontal swipe is intentional (not just messy vertical scrolling)
+    // Do not trigger page transitions on /playground where users swipe 3D models and interactive cards
+    if (location.pathname.startsWith('/playground')) {
+      return;
+    }
+
     if (Math.abs(xDistance) > Math.abs(yDistance)) {
       const isLeftSwipe = xDistance > minSwipeDistance;
       const isRightSwipe = xDistance < -minSwipeDistance;

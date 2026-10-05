@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './Playground.css';
 import SEO from '@/components/SEO';
 import LandingPage from '@/components/LandingPage';
@@ -64,18 +64,54 @@ const COMPONENT_TITLES = {
   'buttons': 'Modern Buttons',
 };
 
+const COMPONENT_KEYS = Object.keys(COMPONENT_TITLES).filter((k) => k !== 'home');
+
 export default function Playground() {
   const [activeTab, setActiveTab] = useState('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     return typeof window !== 'undefined' ? window.innerWidth > 768 : true;
   });
+  const [sidebarSearch, setSidebarSearch] = useState('');
+
+  // Lock mobile body scroll when drawer is open
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      if (isSidebarOpen) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isSidebarOpen]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (typeof window !== 'undefined' && window.innerWidth <= 768) {
       setIsSidebarOpen(false);
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Previous and next component navigation
+  const currentIndex = COMPONENT_KEYS.indexOf(activeTab);
+  const prevComponent = currentIndex > 0 
+    ? COMPONENT_KEYS[currentIndex - 1] 
+    : COMPONENT_KEYS[COMPONENT_KEYS.length - 1];
+  const nextComponent = currentIndex >= 0 && currentIndex < COMPONENT_KEYS.length - 1 
+    ? COMPONENT_KEYS[currentIndex + 1] 
+    : COMPONENT_KEYS[0];
+
+  // Filtered sidebar items
+  const filteredSidebarKeys = useMemo(() => {
+    if (!sidebarSearch.trim()) return COMPONENT_KEYS;
+    const q = sidebarSearch.toLowerCase();
+    return COMPONENT_KEYS.filter((k) => 
+      k.toLowerCase().includes(q) || COMPONENT_TITLES[k].toLowerCase().includes(q)
+    );
+  }, [sidebarSearch]);
 
   return (
     <div className="playground-root">
@@ -84,442 +120,408 @@ export default function Playground() {
         description="An interactive laboratory of modern UI components, animations, WebGL shaders, and creative physics experiments by Jagnoor Singh Marok." 
       />
       <div className="app-layout">
-      {/* Mobile Backdrop Overlay */}
-      {isSidebarOpen && (
-        <div 
-          className="sidebar-backdrop" 
-          onClick={() => setIsSidebarOpen(false)}
-          aria-label="Close Sidebar"
-        />
-      )}
+        {/* Mobile Backdrop Overlay */}
+        {isSidebarOpen && (
+          <div 
+            className="sidebar-backdrop" 
+            onClick={() => setIsSidebarOpen(false)}
+            aria-label="Close Sidebar"
+          />
+        )}
 
-      {/* Sidebar */}
-      <aside className={`sidebar ${!isSidebarOpen ? 'closed' : ''}`}>
-        <div className="sidebar-header">
-          <div className="brand-logo" onClick={() => handleTabClick('home')} style={{ cursor: 'pointer' }}>
-            <h1>The Workshop</h1>
-            <span className="brand-badge">FOLIO IV // LAB</span>
-          </div>
-          <button className="close-btn" onClick={() => setIsSidebarOpen(false)} aria-label="Close Navigation">&times;</button>
-        </div>
-        <nav className="nav-links">
-          <div 
-            className={`nav-link nav-link-overview ${activeTab === 'home' ? 'active' : ''}`}
-            onClick={() => handleTabClick('home')}
-          >
-            <span className="nav-icon">✦</span> Section Index
-          </div>
-          <div className="nav-divider" />
-          <div 
-            className={`nav-link ${activeTab === 'eclipse' ? 'active' : ''}`}
-            onClick={() => handleTabClick('eclipse')}
-          >
-            Eclipse
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'glitch-text' ? 'active' : ''}`}
-            onClick={() => handleTabClick('glitch-text')}
-          >
-            Glitch Text
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'ascii-ripple' ? 'active' : ''}`}
-            onClick={() => handleTabClick('ascii-ripple')}
-          >
-            ASCII Ripple
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'text-loop' ? 'active' : ''}`}
-            onClick={() => handleTabClick('text-loop')}
-          >
-            Text Loop
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'kinetic-text' ? 'active' : ''}`}
-            onClick={() => handleTabClick('kinetic-text')}
-          >
-            Kinetic Text
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'cursor-particles-typography' ? 'active' : ''}`}
-            onClick={() => handleTabClick('cursor-particles-typography')}
-          >
-            Cursor Particles Typography
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'ink-reveal' ? 'active' : ''}`}
-            onClick={() => handleTabClick('ink-reveal')}
-          >
-            Ink Reveal
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'image-stack' ? 'active' : ''}`}
-            onClick={() => handleTabClick('image-stack')}
-          >
-            Image Stack
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'water-ripple-image' ? 'active' : ''}`}
-            onClick={() => handleTabClick('water-ripple-image')}
-          >
-            Water Ripple Image
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'morph-gallery' ? 'active' : ''}`}
-            onClick={() => handleTabClick('morph-gallery')}
-          >
-            Morph Gallery
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'stack-tower' ? 'active' : ''}`}
-            onClick={() => handleTabClick('stack-tower')}
-          >
-            Stack Tower
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'constellation-field' ? 'active' : ''}`}
-            onClick={() => handleTabClick('constellation-field')}
-          >
-            Constellation Field
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'interface-crafts' ? 'active' : ''}`}
-            onClick={() => handleTabClick('interface-crafts')}
-          >
-            Interface Crafts
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'wispr-flow' ? 'active' : ''}`}
-            onClick={() => handleTabClick('wispr-flow')}
-          >
-            Wispr Flow
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'floating-dock' ? 'active' : ''}`}
-            onClick={() => handleTabClick('floating-dock')}
-          >
-            Floating Dock
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'image-spring' ? 'active' : ''}`}
-            onClick={() => handleTabClick('image-spring')}
-          >
-            Image Spring 3D
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'webcam-pixel-grid' ? 'active' : ''}`}
-            onClick={() => handleTabClick('webcam-pixel-grid')}
-          >
-            Webcam Pixel Grid
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'image-trail' ? 'active' : ''}`}
-            onClick={() => handleTabClick('image-trail')}
-          >
-            Image Trail
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'card-globe' ? 'active' : ''}`}
-            onClick={() => handleTabClick('card-globe')}
-          >
-            Card Globe
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'card-tunnel' ? 'active' : ''}`}
-            onClick={() => handleTabClick('card-tunnel')}
-          >
-            Card Tunnel
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'card-toss' ? 'active' : ''}`}
-            onClick={() => handleTabClick('card-toss')}
-          >
-            Card Toss
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'video-collage' ? 'active' : ''}`}
-            onClick={() => handleTabClick('video-collage')}
-          >
-            Video Moodboard
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'card-collage' ? 'active' : ''}`}
-            onClick={() => handleTabClick('card-collage')}
-          >
-            Card Collage
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'threed-card-ring' ? 'active' : ''}`}
-            onClick={() => handleTabClick('threed-card-ring')}
-          >
-            3D Card Ring
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'grainy-carousel' ? 'active' : ''}`}
-            onClick={() => handleTabClick('grainy-carousel')}
-          >
-            Grainy Carousel
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'focus-slice' ? 'active' : ''}`}
-            onClick={() => handleTabClick('focus-slice')}
-          >
-            Focus Slice
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'magazine' ? 'active' : ''}`}
-            onClick={() => handleTabClick('magazine')}
-          >
-            Magazine 3D
-          </div>
-          <div 
-            className={`nav-link ${activeTab === 'buttons' ? 'active' : ''}`}
-            onClick={() => handleTabClick('buttons')}
-          >
-            Buttons
-          </div>
-        </nav>
-      </aside>
-
-      {/* Main Content Area */}
-      <div className={`main-wrapper ${!isSidebarOpen ? 'expanded' : ''}`}>
-        <div className="top-bar">
-          {!isSidebarOpen && (
-            <button className="toggle-btn" onClick={() => setIsSidebarOpen(true)} aria-label="Open Navigation">
-              &#9776; <span>Menu</span>
+        {/* Sidebar Navigation */}
+        <aside className={`sidebar ${!isSidebarOpen ? 'closed' : ''}`}>
+          <div className="sidebar-header">
+            <div className="brand-logo" onClick={() => handleTabClick('home')} style={{ cursor: 'pointer' }}>
+              <h1>The Workshop</h1>
+              <span className="brand-badge">FOLIO IV // 28 APPARATUS</span>
+            </div>
+            <button 
+              className="close-btn" 
+              onClick={() => setIsSidebarOpen(false)} 
+              aria-label="Close Navigation"
+            >
+              &times;
             </button>
+          </div>
+
+          {/* Quick Drawer Filter for Mobile & Desktop */}
+          <div className="sidebar-search-box">
+            <input 
+              type="text" 
+              placeholder="Filter apparatus..." 
+              value={sidebarSearch}
+              onChange={(e) => setSidebarSearch(e.target.value)}
+              className="sidebar-search-input"
+            />
+            {sidebarSearch && (
+              <button 
+                className="sidebar-search-clear" 
+                onClick={() => setSidebarSearch('')}
+                aria-label="Clear filter"
+              >
+                &times;
+              </button>
+            )}
+          </div>
+
+          <nav className="nav-links">
+            <div 
+              className={`nav-link nav-link-overview ${activeTab === 'home' ? 'active' : ''}`}
+              onClick={() => handleTabClick('home')}
+            >
+              <span className="nav-icon">✦</span> Section Index
+            </div>
+            <div className="nav-divider" />
+            
+            {filteredSidebarKeys.map((key) => (
+              <div 
+                key={key}
+                className={`nav-link ${activeTab === key ? 'active' : ''}`}
+                onClick={() => handleTabClick(key)}
+              >
+                {COMPONENT_TITLES[key]}
+              </div>
+            ))}
+
+            {filteredSidebarKeys.length === 0 && (
+              <div className="sidebar-no-results">
+                No apparatus matches "{sidebarSearch}"
+              </div>
+            )}
+          </nav>
+
+          <div className="sidebar-footer">
+            <span className="sidebar-footer-folio">FOLIO IV // THE MAROK GAZETTE</span>
+          </div>
+        </aside>
+
+        {/* Main Content Area */}
+        <div className={`main-wrapper ${!isSidebarOpen ? 'expanded' : ''}`}>
+          <div className="top-bar">
+            {activeTab === 'home' ? (
+              <div className="top-bar-home-layout">
+                <button 
+                  className="toggle-btn" 
+                  onClick={() => setIsSidebarOpen(true)} 
+                  aria-label="Open Navigation Index"
+                >
+                  <span className="toggle-icon">☰</span> 
+                  <span className="toggle-text">Index</span>
+                </button>
+                <div className="top-bar-home-brand">
+                  <span className="home-status-tag">✦ SECTION IV · THE WORKSHOP</span>
+                </div>
+              </div>
+            ) : (
+              <div className="top-bar-nav">
+                <div className="top-bar-nav-left">
+                  <button 
+                    className="toggle-btn" 
+                    onClick={() => setIsSidebarOpen(true)} 
+                    aria-label="Open Navigation Index"
+                    title="Open Component Index"
+                  >
+                    <span>☰</span> <span className="toggle-btn-label">Index</span>
+                  </button>
+
+                  <button 
+                    className="back-showcase-btn" 
+                    onClick={() => handleTabClick('home')}
+                    title="Return to Workshop Index"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="19" y1="12" x2="5" y2="12"></line>
+                      <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Home</span>
+                  </button>
+                </div>
+
+                <div className="top-bar-nav-middle">
+                  <span className="breadcrumb-current" title={COMPONENT_TITLES[activeTab]}>
+                    {COMPONENT_TITLES[activeTab] || 'Experiment'}
+                  </span>
+                </div>
+
+                <div className="top-bar-nav-right">
+                  <div className="prev-next-desktop-group">
+                    <button 
+                      className="prev-next-btn"
+                      onClick={() => handleTabClick(prevComponent)}
+                      title={`Previous: ${COMPONENT_TITLES[prevComponent]}`}
+                      aria-label="Previous component"
+                    >
+                      ←
+                    </button>
+                    <button 
+                      className="prev-next-btn"
+                      onClick={() => handleTabClick(nextComponent)}
+                      title={`Next: ${COMPONENT_TITLES[nextComponent]}`}
+                      aria-label="Next component"
+                    >
+                      →
+                    </button>
+                  </div>
+
+                  <button
+                    className="cce-jump-pill"
+                    onClick={() => {
+                      const el = document.getElementById('component-code-section');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    title="Scroll down to inspect source code and architecture"
+                  >
+                    <span>Notes ↓</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {activeTab !== 'home' && (
+            <div className="specimen-masthead">
+              <div className="specimen-title-group">
+                <span className="specimen-title">{COMPONENT_TITLES[activeTab] || 'APPARATUS'}</span>
+                <span className="specimen-folio-tag">// SPECIMEN {activeTab.toUpperCase()}</span>
+              </div>
+              <div className="specimen-runtime-tag">
+                <span>BROADSHEET FOLIO · LIVE RUNTIME</span>
+              </div>
+            </div>
           )}
 
-          {activeTab !== 'home' ? (
-            <div className="top-bar-nav">
-              <button 
-                className="back-showcase-btn" 
-                onClick={() => handleTabClick('home')}
-                title="Return to Workshop Index"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="19" y1="12" x2="5" y2="12"></line>
-                  <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-                <span>← Index</span>
-              </button>
-              <span className="breadcrumb-separator">/</span>
-              <span className="breadcrumb-current">{COMPONENT_TITLES[activeTab] || 'Experiment'}</span>
+          {/* Viewport content */}
+          {activeTab === 'home' && (
+            <LandingPage onSelectComponent={(tab) => handleTabClick(tab)} />
+          )}
 
-              <button
-                className="cce-jump-pill"
+          {activeTab === 'eclipse' && (
+            <div className="playground-demo-stage eclipse-stage">
+              <EclipseDemo />
+            </div>
+          )}
+
+          {activeTab === 'glitch-text' && (
+            <div className="playground-demo-stage glitch-text-stage">
+              <GlitchTextDemo />
+            </div>
+          )}
+
+          {activeTab === 'ascii-ripple' && (
+            <div className="playground-demo-stage ascii-ripple-stage">
+              <AsciiRippleDemo />
+            </div>
+          )}
+
+          {activeTab === 'text-loop' && (
+            <div className="playground-demo-stage text-loop-stage">
+              <TextLoopDemo />
+            </div>
+          )}
+
+          {activeTab === 'kinetic-text' && (
+            <div className="playground-demo-stage kinetic-text-stage">
+              <KineticTextDemo />
+            </div>
+          )}
+
+          {activeTab === 'cursor-particles-typography' && (
+            <div className="playground-demo-stage cursor-particles-stage">
+              <CursorParticlesTypographyDemo />
+            </div>
+          )}
+
+          {activeTab === 'ink-reveal' && (
+            <div className="playground-demo-stage ink-reveal-stage">
+              <InkRevealDemo />
+            </div>
+          )}
+
+          {activeTab === 'image-stack' && (
+            <div className="playground-demo-stage image-stack-stage">
+              <ImageStackDemo />
+            </div>
+          )}
+
+          {activeTab === 'water-ripple-image' && (
+            <div className="playground-demo-stage water-ripple-stage">
+              <WaterRippleImageDemo />
+            </div>
+          )}
+
+          {activeTab === 'morph-gallery' && (
+            <div className="playground-demo-stage morph-gallery-stage">
+              <MorphGalleryDemo />
+            </div>
+          )}
+
+          {activeTab === 'stack-tower' && (
+            <div className="playground-demo-stage stack-tower-stage">
+              <StackTowerDemo />
+            </div>
+          )}
+
+          {activeTab === 'constellation-field' && (
+            <div className="playground-demo-stage constellation-field-stage">
+              <ConstellationFieldDemo />
+            </div>
+          )}
+
+          {activeTab === 'interface-crafts' && (
+            <div className="playground-demo-stage interface-crafts-stage">
+              <InterfaceCraftsDemo />
+            </div>
+          )}
+
+          {activeTab === 'wispr-flow' && (
+            <div className="playground-demo-stage wispr-flow-stage">
+              <WisprFlowDemo />
+            </div>
+          )}
+
+          {activeTab === 'floating-dock' && (
+            <div className="playground-demo-stage floating-dock-stage">
+              <FloatingDockDemo />
+            </div>
+          )}
+
+          {activeTab === 'image-spring' && (
+            <div className="playground-demo-stage image-spring-stage">
+              <ImageSpring />
+            </div>
+          )}
+
+          {activeTab === 'webcam-pixel-grid' && (
+            <div className="playground-demo-stage webcam-pixel-grid-stage">
+              <WebcamPixelGridDemo />
+            </div>
+          )}
+
+          {activeTab === 'image-trail' && (
+            <div className="playground-demo-stage image-trail-stage">
+              <ImageTrail />
+            </div>
+          )}
+
+          {activeTab === 'card-globe' && (
+            <div className="playground-demo-stage card-globe-stage">
+              <CardGlobe />
+            </div>
+          )}
+
+          {activeTab === 'card-tunnel' && (
+            <div className="playground-demo-stage card-tunnel-stage">
+              <CardTunnel />
+            </div>
+          )}
+
+          {activeTab === 'card-toss' && (
+            <div className="playground-demo-stage card-toss-stage">
+              <CardToss />
+            </div>
+          )}
+
+          {activeTab === 'video-collage' && (
+            <div className="playground-demo-stage video-collage-stage">
+              <VideoReferenceCollage />
+            </div>
+          )}
+
+          {activeTab === 'card-collage' && (
+            <div className="playground-demo-stage card-collage-stage">
+              <AnimatedCardCollage />
+            </div>
+          )}
+
+          {activeTab === 'threed-card-ring' && (
+            <div className="playground-demo-stage threed-card-ring-stage">
+              <ThreeDCardRing />
+            </div>
+          )}
+
+          {activeTab === 'grainy-carousel' && (
+            <div className="playground-demo-stage grainy-carousel-stage">
+              <GrainyCarousel />
+            </div>
+          )}
+
+          {activeTab === 'focus-slice' && (
+            <div className="playground-demo-stage focus-slice-stage">
+              <FocusSliceCarousel />
+            </div>
+          )}
+
+          {activeTab === 'magazine' && (
+            <div className="playground-demo-stage magazine-stage">
+              <Magazine />
+            </div>
+          )}
+
+          {activeTab === 'buttons' && (
+            <div className="playground-demo-stage buttons-stage">
+              <main className="main-content">
+                <header className="showcase-header">
+                  <h2>Buttons</h2>
+                  <p>Minimal, accessible button components.</p>
+                </header>
+                <section className="showcase-area">
+                  <ButtonShowcase />
+                </section>
+              </main>
+            </div>
+          )}
+
+          {/* Code & Architecture Breakdown Section for Every Component */}
+          {activeTab !== 'home' && (
+            <ComponentCodeExplainer componentId={activeTab} />
+          )}
+
+          {/* Sticky Mobile Floating Navigation Controller */}
+          {activeTab !== 'home' && (
+            <div className="mobile-bottom-bar" aria-label="Mobile Apparatus Navigation">
+              <button 
+                className="mobile-bar-btn"
+                onClick={() => handleTabClick(prevComponent)}
+                title={`Previous: ${COMPONENT_TITLES[prevComponent]}`}
+                aria-label="Previous component"
+              >
+                <span>← Prev</span>
+              </button>
+
+              <button 
+                className="mobile-bar-btn mobile-bar-index"
+                onClick={() => setIsSidebarOpen(true)}
+                title="Open Index of all 28 Apparatus"
+                aria-label="Open index drawer"
+              >
+                <span>☰ 28 APPARATUS</span>
+              </button>
+
+              <button 
+                className="mobile-bar-btn"
+                onClick={() => handleTabClick(nextComponent)}
+                title={`Next: ${COMPONENT_TITLES[nextComponent]}`}
+                aria-label="Next component"
+              >
+                <span>Next →</span>
+              </button>
+
+              <button 
+                className="mobile-bar-btn mobile-bar-notes"
                 onClick={() => {
                   const el = document.getElementById('component-code-section');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
                 title="Scroll down to inspect source code and architecture"
+                aria-label="Scroll to architecture notes"
               >
-                <span>Blueprint & Notes ↓</span>
+                <span>Notes ↓</span>
               </button>
-            </div>
-          ) : (
-            <div className="top-bar-home-brand">
-              <span className="home-status-tag">✦ SECTION IV · THE WORKSHOP</span>
             </div>
           )}
         </div>
-
-        {activeTab !== 'home' && (
-          <div className="specimen-masthead">
-            <div>
-              <span className="specimen-title">{COMPONENT_TITLES[activeTab] || 'APPARATUS'}</span>
-              <span style={{ marginLeft: '10px', color: 'var(--accent)' }}>// SPECIMEN {activeTab.toUpperCase()}</span>
-            </div>
-            <div className="hidden sm:block">
-              <span>BROADSHEET FOLIO · LIVE RUNTIME</span>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'home' && (
-          <LandingPage onSelectComponent={(tab) => handleTabClick(tab)} />
-        )}
-
-        {activeTab === 'eclipse' && (
-          <div className="eclipse-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-             <EclipseDemo />
-          </div>
-        )}
-
-        {activeTab === 'glitch-text' && (
-          <div className="glitch-text-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-             <GlitchTextDemo />
-          </div>
-        )}
-
-        {activeTab === 'ascii-ripple' && (
-          <div className="ascii-ripple-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-             <AsciiRippleDemo />
-          </div>
-        )}
-
-        {activeTab === 'text-loop' && (
-          <div className="text-loop-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-             <TextLoopDemo />
-          </div>
-        )}
-
-        {activeTab === 'kinetic-text' && (
-          <div className="kinetic-text-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-             <KineticTextDemo />
-          </div>
-        )}
-
-        {activeTab === 'cursor-particles-typography' && (
-          <div className="cursor-particles-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-             <CursorParticlesTypographyDemo />
-          </div>
-        )}
-
-        {activeTab === 'ink-reveal' && (
-          <div className="ink-reveal-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-             <InkRevealDemo />
-          </div>
-        )}
-
-        {activeTab === 'image-stack' && (
-          <div className="image-stack-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-             <ImageStackDemo />
-          </div>
-        )}
-
-        {activeTab === 'water-ripple-image' && (
-          <div className="water-ripple-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-             <WaterRippleImageDemo />
-          </div>
-        )}
-
-        {activeTab === 'morph-gallery' && (
-          <div className="morph-gallery-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-             <MorphGalleryDemo />
-          </div>
-        )}
-
-        {activeTab === 'stack-tower' && (
-          <div className="stack-tower-main" style={{ width: '100%', minHeight: '100vh', display: 'flex' }}>
-             <StackTowerDemo />
-          </div>
-        )}
-
-        {activeTab === 'constellation-field' && (
-          <div className="constellation-field-main" style={{ width: '100%', minHeight: '100vh', display: 'flex' }}>
-             <ConstellationFieldDemo />
-          </div>
-        )}
-
-        {activeTab === 'interface-crafts' && (
-          <div className="interface-crafts-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <InterfaceCraftsDemo />
-          </div>
-        )}
-
-        {activeTab === 'wispr-flow' && (
-          <div className="wispr-flow-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <WisprFlowDemo />
-          </div>
-        )}
-
-        {activeTab === 'floating-dock' && (
-          <div className="floating-dock-main" style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--paper2)', position: 'relative' }}>
-             <FloatingDockDemo />
-          </div>
-        )}
-
-        {activeTab === 'image-spring' && (
-          <div className="image-spring-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <ImageSpring />
-          </div>
-        )}
-
-        {activeTab === 'webcam-pixel-grid' && (
-          <div className="webcam-pixel-grid-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <WebcamPixelGridDemo />
-          </div>
-        )}
-
-        {activeTab === 'image-trail' && (
-          <div className="image-trail-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <ImageTrail />
-          </div>
-        )}
-
-        {activeTab === 'card-globe' && (
-          <div className="card-globe-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <CardGlobe />
-          </div>
-        )}
-
-        {activeTab === 'card-tunnel' && (
-          <div className="card-tunnel-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <CardTunnel />
-          </div>
-        )}
-
-        {activeTab === 'card-toss' && (
-          <div className="card-toss-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <CardToss />
-          </div>
-        )}
-
-        {activeTab === 'video-collage' && (
-          <div className="video-collage-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <VideoReferenceCollage />
-          </div>
-        )}
-
-        {activeTab === 'card-collage' && (
-          <div className="card-collage-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <AnimatedCardCollage />
-          </div>
-        )}
-
-        {activeTab === 'threed-card-ring' && (
-          <div className="threed-card-ring-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <ThreeDCardRing />
-          </div>
-        )}
-
-        {activeTab === 'grainy-carousel' && (
-          <div className="grainy-carousel-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <GrainyCarousel />
-          </div>
-        )}
-
-        {activeTab === 'focus-slice' && (
-          <div className="focus-slice-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <FocusSliceCarousel />
-          </div>
-        )}
-
-        {activeTab === 'magazine' && (
-          <div className="magazine-main" style={{ width: '100%', height: '100vh', display: 'flex' }}>
-             <Magazine />
-          </div>
-        )}
-
-        {activeTab === 'buttons' && (
-          <main className="main-content" style={{ paddingTop: '5rem' }}>
-            <header className="showcase-header">
-              <h2>Buttons</h2>
-              <p>Minimal, accessible button components.</p>
-            </header>
-            <section className="showcase-area">
-              <ButtonShowcase />
-            </section>
-          </main>
-        )}
-
-        {/* Code & Architecture Breakdown Section for Every Component */}
-        {activeTab !== 'home' && (
-          <ComponentCodeExplainer componentId={activeTab} />
-        )}
       </div>
     </div>
-  </div>
   );
 }

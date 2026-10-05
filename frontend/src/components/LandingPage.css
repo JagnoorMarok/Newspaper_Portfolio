@@ -727,6 +727,25 @@
     gap: 1rem;
   }
 
+  .category-filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 100%;
+  }
+
+  .category-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-chip {
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-height: 38px;
+  }
+
   .search-box {
     width: 100%;
   }
